@@ -17,7 +17,7 @@ from report.models import Account, Campaign, AdGroup, Keyword
 logging.basicConfig(level=logging.INFO)
 logging.getLogger('suds.transport').setLevel(logging.DEBUG)
 
-def main(client_id):
+def main():
   adwords_client = adwords.AdWordsClient.LoadFromStorage()
   report_downloader = adwords_client.GetReportDownloader(version='v201506')
 
