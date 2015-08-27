@@ -19,7 +19,7 @@ logging.getLogger('suds.transport').setLevel(logging.DEBUG)
 
 
 
-def main(client, client_ID):
+def main(client, client_id):
   report_downloader = client.GetReportDownloader(version='v201506')
 
   # Create report definition.
