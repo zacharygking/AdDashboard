@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 
 def index(request):
@@ -16,6 +16,11 @@ from report.models import Account, Campaign, AdGroup, Keyword
 
 logging.basicConfig(level=logging.INFO)
 logging.getLogger('suds.transport').setLevel(logging.DEBUG)
+
+def result(request, campaign_id):
+  campaign = get_object_or_404(Campaign, pk=campaign_id)
+  return render(request, 'report/main.html',{'Campaign': campaign})
+
 
 def main(request):
   adwords_client = adwords.AdWordsClient.LoadFromStorage()

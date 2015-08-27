@@ -1,0 +1,16 @@
+<h3>{{ Campaign.campaign_name }} </h3>	
+
+{% for adgroup in Campaign.adgroup_set.all %}
+    {{ adgroup.ad_group_name }}
+    <ol>
+    {% for keyword in adgroup.keyword_set.all %}
+    {{ keyword.keyword_placement }}
+    	<ul>
+     	<li>{{ 'cost: ' }} {{ keyword.cost }}</li>
+     	<li>{{ 'clicks: '}} {{ keyword.clicks }}</li>
+     	<li>{{ 'impressions: ' }} {{ keyword.impressions}}</li>
+     	</ul>
+    {% endfor %}
+	</ol>
+
+{% endfor %}
