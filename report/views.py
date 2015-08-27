@@ -17,11 +17,9 @@ from report.models import Account, Campaign, AdGroup, Keyword
 logging.basicConfig(level=logging.INFO)
 logging.getLogger('suds.transport').setLevel(logging.DEBUG)
 
-def test(client, campaign_id):
-  ayylmao = "at the home page for " + campaign_id
-  return HttpResponse(ayylmao)
 
-def main(client):
+
+def main(client, client_ID):
   report_downloader = client.GetReportDownloader(version='v201506')
 
   # Create report definition.
