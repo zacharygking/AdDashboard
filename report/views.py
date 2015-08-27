@@ -12,7 +12,7 @@ import logging
 import sys
 import xml.etree.ElementTree as ET
 from googleads import adwords
-from report.models import Account, Campaign, Adgroup, Keyword
+from report.models import Account, Campaign, AdGroup, Keyword
 
 logging.basicConfig(level=logging.INFO)
 logging.getLogger('suds.transport').setLevel(logging.DEBUG)
