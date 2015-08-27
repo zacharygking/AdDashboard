@@ -9,6 +9,8 @@ class Campaign(models.Model):
 
 class AdGroup(models.Model):
     ad_group_name = models.CharField(max_length=200,default='')
+    campaign_name = models.CharField(max_length=200,default='')
+
     campaign = models.ForeignKey(Campaign)
     def __str__(self):
         return self.ad_group_name
