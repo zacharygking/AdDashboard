@@ -13,6 +13,7 @@ import sys
 import xml.etree.ElementTree as ET
 from googleads import adwords
 from report.models import Account, Campaign, AdGroup, Keyword
+from django.core.exceptions import ObjectDoesNotExist
 
 logging.basicConfig(level=logging.INFO)
 logging.getLogger('suds.transport').setLevel(logging.DEBUG)
@@ -36,25 +37,35 @@ def main(request):
   # You can provide a file object to write the output to. For this demonstration
   # we use sys.stdout to write the report to the screen.
   file = open('output.xml', 'w')
-  
+
   report_downloader.DownloadReport(
       report, file, skip_report_header=False, skip_column_header=False,
       skip_report_summary=False, include_zero_impressions=False)
 
   file.close()
-  
+
   tree = ET.parse('output.xml')
   root = tree.getroot()
-  
+
   for table in root.findall('table'):
   	for row in table.findall('row'):
   		campaignName = row.get('campaign')
   		adGroupName = row.get('adGroup')
   		try:
   			adGroup = AdGroup.objects.get(ad_group_name=adGroupName)
-  			campaign = adGroup.get(campaign_name=campaignName)
-  		except RuntimeError: 
-  			campaign = Campaign()
+  			if(campaignName == adGroup.campaign_name):
+                                campaign = adGroup.campaign
+                     	else:
+                                campaign = Campaign()
+                                campaign.campaign_name = campaignName
+                                campaign.save()
+                                adGroup = AdGroup()
+                                adGroup.ad_group_name = adGroupName
+                                adGroup.campaign_name = campaignName
+                                adGroup.campaign = campaign
+                                adGroup.save()
+                except ObjectDoesNotExist:
+                        campaign = Campaign()
   			campaign.campaign_name = campaignName
   			campaign.save()
   			adGroup = AdGroup()
@@ -62,7 +73,7 @@ def main(request):
   			adGroup.campaign_name = campaignName
   			adGroup.campaign = campaign
   			adGroup.save()
-  		
+
   		data = Keyword()
   		data.keyword_id = row.get('keywordID')
   		data.keyword_placement = row.get('keywordPlacement')
