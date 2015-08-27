@@ -52,27 +52,16 @@ def main(request):
   		campaignName = row.get('campaign')
   		adGroupName = row.get('adGroup')
   		try:
-  			adGroup = AdGroup.objects.get(ad_group_name=adGroupName)
-  			if(campaignName == adGroup.campaign_name):
-                                campaign = adGroup.campaign
-                     	else:
-                                campaign = Campaign()
-                                campaign.campaign_name = campaignName
-                                campaign.save()
-                                adGroup = AdGroup()
-                                adGroup.ad_group_name = adGroupName
-                                adGroup.campaign_name = campaignName
-                                adGroup.campaign = campaign
-                                adGroup.save()
-                except ObjectDoesNotExist:
+                        adGroup = AdGroup.objects.get(ad_group_name=adGroupName,campaign_name=campaignName)
+  		except ObjectDoesNotExist:
                         campaign = Campaign()
-  			campaign.campaign_name = campaignName
-  			campaign.save()
-  			adGroup = AdGroup()
-  			adGroup.ad_group_name = adGroupName
-  			adGroup.campaign_name = campaignName
-  			adGroup.campaign = campaign
-  			adGroup.save()
+                        campaign.campaign_name = campaignName
+                        campaign.save()
+                        adGroup = AdGroup()
+                        adGroup.ad_group_name = adGroupName
+                        adGroup.campaign_name = campaignName
+                        adGroup.campaign = campaign
+                        adGroup.save()
 
   		data = Keyword()
   		data.keyword_id = row.get('keywordID')
