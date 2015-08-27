@@ -46,7 +46,7 @@ def main(request):
   tree = ET.parse('output.xml')
   root = tree.getroot()
   
-  for table in root.findall('root'):
+  for table in root.findall('table'):
   	for row in table.findall('row'):
   		campaignName = row.get('campaign')
   		try:
