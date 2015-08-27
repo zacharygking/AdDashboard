@@ -4,6 +4,6 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
-    url(r'^(?P<client_id>[0-9]+)/$', views.main, name='main'),
+    url(r'^/5/$', views.main, name='main'),
     ]
 
