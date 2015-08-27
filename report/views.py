@@ -16,6 +16,9 @@ from googleads import adwords
 logging.basicConfig(level=logging.INFO)
 logging.getLogger('suds.transport').setLevel(logging.DEBUG)
 
+def test(client, campaign_id):
+  ayylmao = "at the home page for " + campaign_id
+  return HttpResponse(ayylmao)
 
 def main(client):
   report_downloader = client.GetReportDownloader(version='v201506')
