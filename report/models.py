@@ -10,15 +10,18 @@ class Account(models.Model):
 
 class Campaign(models.Model):
     campaign_name = models.CharField(max_length=200, default='')
-
+    
+    adGroup = models.ForeignKey(AdGroup)
+    
     def __str__(self):
         return self.campaign_name
 
 class AdGroup(models.Model):
     ad_group_name = models.CharField(max_length=200,default='')
     campaign_name = models.CharField(max_length=200,default='')
-
-    campaign = models.ForeignKey(Campaign)
+    
+    keyword = models.ForeignKey(Keyword)
+    
     def __str__(self):
         return self.ad_group_name
 
@@ -28,10 +31,9 @@ class Keyword(models.Model):
     clicks = models.IntegerField(default = 0)
     impressions = models.IntegerField(default = 0)
     cost = models.IntegerField(default = 0)
-    adgroup = models.ForeignKey(AdGroup)
+    
     def __str__(self):
         return self.keyword_placement
-
 
 
 

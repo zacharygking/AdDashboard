@@ -12,6 +12,7 @@ import logging
 import sys
 import xml.etree.ElementTree as ET
 from googleads import adwords
+from report.models import Account, Campaign, AdGroup, Keyword
 
 logging.basicConfig(level=logging.INFO)
 logging.getLogger('suds.transport').setLevel(logging.DEBUG)
@@ -50,4 +51,33 @@ if __name__ == '__main__':
   main(adwords_client)
   tree = ET.parse('output.xml')
   root = tree.getroot()
-
+  
+  for table in root.findall('root'):
+  	for row in table.findall('row'):
+  		campaignName = row.get('campaign')
+  		try:
+  			campaign = Campaign.objects.get(campaign_name=campaignName)
+  		except RuntimeError: 
+  			campaign = Campaign()
+  			campaign.campaign_name = campaignName
+  			campaign.save()
+  			
+  			adGroupName = row.get('adGroup')
+  		try:
+  			adGroup = campaign.get(ad_group_name=adGroupName)
+  		except RuntimeError:
+  			adGroup = adGroup()
+  			adGroup.ad_group_name = adGroupName
+  			adGroup.save()
+  			campaign.adGroup = adGroup
+  			campaign.save()
+  			
+  		data = Keyword()
+  		data.keyword_id = row.get('keywordID')
+  		data.keyword_placement = row.get('keywordPlacement')
+  		data.clicks = row.get('clicks')
+  		data.impressions = row.get('impressions')
+  		data.cost = row.get('cost')
+  		data.save()
+  		
+  		campaign.adGroup.keyword = data
