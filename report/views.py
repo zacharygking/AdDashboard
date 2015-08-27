@@ -49,31 +49,27 @@ def main(request):
   for table in root.findall('table'):
   	for row in table.findall('row'):
   		campaignName = row.get('campaign')
+  		adGroupName = row.get('adGroup')
   		try:
-  			campaign = Campaign.objects.get(campaign_name=campaignName)
+  			adGroup = AdGroup.objects.get(ad_group_name=adGroupName)
+  			campaign = adGroup.get(campaign_name=campaignName)
   		except RuntimeError: 
   			campaign = Campaign()
   			campaign.campaign_name = campaignName
   			campaign.save()
-  			
-  			adGroupName = row.get('adGroup')
-  		try:
-  			adGroup = campaign.get(ad_group_name=adGroupName)
-  		except RuntimeError:
-  			adGroup = adGroup()
+  			adGroup = AdGroup()
   			adGroup.ad_group_name = adGroupName
+  			adGroup.campaign_name = campaignName
+  			adGroup.campaign = campaign
   			adGroup.save()
-  			campaign.adGroup = adGroup
-  			campaign.save()
-  			
+  		
   		data = Keyword()
   		data.keyword_id = row.get('keywordID')
   		data.keyword_placement = row.get('keywordPlacement')
   		data.clicks = row.get('clicks')
   		data.impressions = row.get('impressions')
   		data.cost = row.get('cost')
+  		data.adgroup = adGroup
   		data.save()
-  		
-  		campaign.adGroup.keyword = data
 
   return HttpResponse("done")
