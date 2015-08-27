@@ -5,6 +5,9 @@ def index(request):
 	return HttpResponse("Hello, world. You're at the report index.")
 
 #!/usr/bin/python
+
+#Google copyright
+
 import logging
 import sys
 import xml.etree.ElementTree as ET
