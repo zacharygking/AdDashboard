@@ -17,10 +17,9 @@ from report.models import Account, Campaign, AdGroup, Keyword
 logging.basicConfig(level=logging.INFO)
 logging.getLogger('suds.transport').setLevel(logging.DEBUG)
 
-
-
-def main(client, client_id):
-  report_downloader = client.GetReportDownloader(version='v201506')
+def main(client_id):
+  adwords_client = adwords.AdWordsClient.LoadFromStorage()
+  report_downloader = adwords_client.GetReportDownloader(version='v201506')
 
   # Create report definition.
   report = {
@@ -43,10 +42,7 @@ def main(client, client_id):
       skip_report_summary=False, include_zero_impressions=False)
 
   file.close()
-
-if __name__ == '__main__':
-  adwords_client = adwords.AdWordsClient.LoadFromStorage()
-  main(adwords_client)
+  
   tree = ET.parse('output.xml')
   root = tree.getroot()
   
