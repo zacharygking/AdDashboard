@@ -1,6 +1,13 @@
 from django.db import models
 from datetime import datetime
 
+class Account(models.Model):
+    account_name = models.CharField(max_length=200,default='')
+    customer_id = models.CharField(max_length=12,default = '000-000-0000')
+
+    def __str__(self):
+        return self.account_name
+
 class Campaign(models.Model):
     campaign_name = models.CharField(max_length=200, default='')
 
