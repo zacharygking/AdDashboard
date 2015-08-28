@@ -40,6 +40,8 @@ def main(request, time_id):
   Keyword.objects.all().delete()
   adwords_client = adwords.AdWordsClient.LoadFromStorage()
   report_downloader = adwords_client.GetReportDownloader(version='v201506')
+  
+  time_id = int(time_id)
 
   if time_id == 1:
           date = 'LAST_7_DAYS'
@@ -48,7 +50,7 @@ def main(request, time_id):
   elif time_id == 3:
           date = 'ALL_TIME'
   else:
-          date = 'ALL_TIME'
+          return HTTPResponse("time_id is not 1, 2, or 3")
   
   # Create report definition.
   report = {
