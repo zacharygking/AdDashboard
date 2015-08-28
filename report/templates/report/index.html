@@ -1,14 +1,32 @@
-<center><h1> {{ 'Idmloco Database' }} </h1>
-<table border=1>
-    <tr>
-    	<td height="50">
-        	<center><a href ="/report/generate/">Generate Data</a></center>			
-        </td>		
-    </tr>
-	<tr>
-		<td height="50">
-			<center><a href ="/report/campaigns/">Campaign Index</a></center>
-		</td>
-	</tr>
-</table>
+
+<head>
+<style type ="text/css">
+.btn {
+  -webkit-border-radius: 28;
+  -moz-border-radius: 28;
+  border-radius: 28px;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 20px;
+  background: #3498db;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+}
+
+.btn:hover {
+  background: #056ca8;
+  text-decoration: none;
+}
+}
+</style>
+</head>
+<body>
+<center><h1> {{ 'Ad Report Dashboard' }} </h1>
+<h3> Generate a Report: </h3>
+<a href="report/generate/1" class="btn"> 7 Days </a>
+<a href="report/generate/2" class="btn"> Last Month </a>
+<a href="report/generate/3" class="btn"> All Time </a>
+<h3> View Results of Latest Report: </h3>
+<a href="report/campaigns" class="btn"> View Report </a>
 </center>
+</body>
