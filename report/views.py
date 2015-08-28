@@ -32,6 +32,9 @@ def result(request, campaign_id):
 
 
 def main(request):
+  Campaign.objects.all().delete()
+  AdGroup.objects.all().delete()
+  Keyword.objects.all().delete()
   adwords_client = adwords.AdWordsClient.LoadFromStorage()
   report_downloader = adwords_client.GetReportDownloader(version='v201506')
 
@@ -65,17 +68,20 @@ def main(request):
   		campaignName = row.get('campaign')
   		adGroupName = row.get('adGroup')
   		try:
-                        adGroup = AdGroup.objects.get(ad_group_name=adGroupName,campaign_name=campaignName)
+                        campaign = Campaign.objects.get(campaign_name=campaignName)
   		except ObjectDoesNotExist:
                         campaign = Campaign()
                         campaign.campaign_name = campaignName
                         campaign.save()
+  		try:
+                        adGroup = AdGroup.objects.get(ad_group_name=adGroupName)
+  		except ObjectDoesNotExist:
                         adGroup = AdGroup()
-                        adGroup.ad_group_name = adGroupName
-                        adGroup.campaign_name = campaignName
-                        adGroup.campaign = campaign
-                        adGroup.save()
-
+                        adGroup.ad_group_name = adGroupName                        
+                         
+  		adGroup.campaign = campaign
+  		adGroup.save()
+  		
   		data = Keyword()
   		data.keyword_id = row.get('keywordID')
   		data.keyword_placement = row.get('keywordPlacement')
