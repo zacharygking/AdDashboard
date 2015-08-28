@@ -38,7 +38,7 @@ def result(request, campaign_id):
   return render(request, 'report/main.html',{'Campaign': campaign})
 
 
-def main(request):
+def main(request, time_id):
   Campaign.objects.all().delete()
   AdGroup.objects.all().delete()
   Keyword.objects.all().delete()
