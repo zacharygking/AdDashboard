@@ -18,6 +18,14 @@ from django.core.exceptions import ObjectDoesNotExist
 logging.basicConfig(level=logging.INFO)
 logging.getLogger('suds.transport').setLevel(logging.DEBUG)
 
+def campaigns(request):
+  try:
+    campaign_list = Campaign.objects.all()
+    return render(request, 'report/campaigns.html', {'campaigns': campaign_list})
+  except ObjectDoesNotExist:
+    return HttpResponse("No Campaigns Exist")
+
+
 def result(request, campaign_id):
   campaign = get_object_or_404(Campaign, pk=campaign_id)
   return render(request, 'report/main.html',{'Campaign': campaign})
