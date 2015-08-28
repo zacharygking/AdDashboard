@@ -18,6 +18,14 @@ from django.core.exceptions import ObjectDoesNotExist
 logging.basicConfig(level=logging.INFO)
 logging.getLogger('suds.transport').setLevel(logging.DEBUG)
 
+def adgroup(request, adgroup_id):
+  adgroup = get_object_or_404(AdGroup,pk=adgroup_id)
+  return render(request, 'report/adgroups.html', {'adgroup' : adgroup})
+
+
+
+
+
 def campaigns(request):
   try:
     campaign_list = Campaign.objects.all()

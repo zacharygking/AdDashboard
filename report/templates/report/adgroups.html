@@ -1,0 +1,19 @@
+<center>
+{{adgroup.campaign.campaign_name}}<br>
+{{adgroup.ad_group_name}}
+<table border=1>
+	<tr>
+		<td><strong> Keyword </strong></td>
+		<td><strong> Cost </strong></td>
+		<td><strong> Clicks </strong></td>
+		<td><strong> Impressions </strong></td>
+	</tr>
+	{% for keyword in adgroup.keyword_set.all %}
+		<tr>
+			<td> {{keyword.keyword_placement}} </td>
+			<td> {{keyword.cost}} </td>
+			<td> {{keyword.clicks }} </td>
+			<td> {{keyword.impressions}} </td>
+		</tr>
+	{% endfor %}
+</center>

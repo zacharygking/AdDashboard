@@ -4,7 +4,7 @@
 		{% for adgroup in Campaign.adgroup_set.all %}
    			<tr>
     			<td>
-        			<center>{{ adgroup.ad_group_name }}</center>
+        			<center><a href ="/report/adgroups/{{adgroup.id}}/">{{ adgroup.ad_group_name }}</a></center>
         		</td>
     		</tr>
  		{% endfor %}
