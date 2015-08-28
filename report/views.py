@@ -99,4 +99,4 @@ def main(request):
   		data.adgroup = adGroup
   		data.save()
 
-  return HttpResponse("done")
+  return render(request, 'report/index.html')

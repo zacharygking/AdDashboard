@@ -1,5 +1,5 @@
-<center><h3>{{ Campaign.campaign_name }} </h3>	
-<h3> Select the Adgroup to show data for  </h3>
+<center><h3> Campaign: {{ Campaign.campaign_name }} </h3>	
+<h3> Select the Ad Group to show data for  </h3>
 	<table border=1>
 		{% for adgroup in Campaign.adgroup_set.all %}
    			<tr>
