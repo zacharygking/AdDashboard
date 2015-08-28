@@ -25,7 +25,7 @@ class Keyword(models.Model):
      keyword_placement = models.CharField(max_length=200,default='')
      clicks = models.IntegerField(default = 0)
      impressions = models.IntegerField(default = 0)
-     cost = models.IntegerField(default = 0)
+     cost = models.FloatField(default = 0.0)
      adgroup = models.ForeignKey(AdGroup)
      def __str__(self):
          return self.keyword_placement

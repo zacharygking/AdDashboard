@@ -21,10 +21,6 @@ def adgroup(request, adgroup_id):
   adgroup = get_object_or_404(AdGroup,pk=adgroup_id)
   return render(request, 'report/adgroups.html', {'adgroup' : adgroup})
 
-
-
-
-
 def campaigns(request):
   try:
     campaign_list = Campaign.objects.all()
@@ -45,10 +41,19 @@ def main(request, time_id):
   adwords_client = adwords.AdWordsClient.LoadFromStorage()
   report_downloader = adwords_client.GetReportDownloader(version='v201506')
 
+  if time_id == 1:
+          date = 'LAST_7_DAYS'
+  elif time_id == 2:
+          date = 'THIS_MONTH'
+  elif time_id == 3:
+          date = 'ALL_TIME'
+  else:
+          date = 'ALL_TIME'
+  
   # Create report definition.
   report = {
-      'reportName': 'ALL_TIME_CRITERIA_PERFORMANCE_REPORT',
-      'dateRangeType': 'ALL_TIME',
+      'reportName': date+'_CRITERIA_PERFORMANCE_REPORT',
+      'dateRangeType': date,
       'reportType': 'CRITERIA_PERFORMANCE_REPORT',
       'downloadFormat': 'XML',
       'selector': {
