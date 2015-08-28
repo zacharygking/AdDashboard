@@ -103,6 +103,7 @@ def main(request, time_id):
   		data.clicks = row.get('clicks')
   		data.impressions = row.get('impressions')
   		data.cost = row.get('cost')
+  		data.cost = data.cost/1000000
   		data.adgroup = adGroup
   		data.save()
 
