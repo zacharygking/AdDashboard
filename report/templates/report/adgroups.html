@@ -13,7 +13,7 @@ Ad Group: {{adgroup.ad_group_name}}
 	{% for keyword in adgroup.keyword_set.all %}
 		<tr>
 			<td> {{keyword.keyword_placement}} </td>
-			<td> {{keyword.cost}} </td>
+			<td> ${{keyword.cost}} </td>
 			<td> {{keyword.clicks }} </td>
 			<td> {{keyword.impressions}} </td>
 		</tr>
