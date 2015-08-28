@@ -107,4 +107,4 @@ def main(request, time_id):
   		data.adgroup = adGroup
   		data.save()
 
-  return render(request, 'report/index.html')
+  return campaigns(request)
