@@ -2,8 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 
 def index(request):
-	return HttpResponse("Hello, world. You're at the report index.")
-
+	return render(request, 'report/index.html')
 #!/usr/bin/python
 
 #Google copyright
