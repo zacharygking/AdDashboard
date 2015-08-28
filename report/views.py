@@ -80,6 +80,7 @@ def main(request):
                         adGroup.ad_group_name = adGroupName                        
                          
   		adGroup.campaign = campaign
+  		adGroup.campaign_name = campaignName
   		adGroup.save()
   		
   		data = Keyword()
