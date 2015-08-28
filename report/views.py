@@ -74,7 +74,7 @@ def main(request):
                         campaign.campaign_name = campaignName
                         campaign.save()
   		try:
-                        adGroup = AdGroup.objects.get(ad_group_name=adGroupName)
+                        adGroup = AdGroup.objects.get(ad_group_name=adGroupName, campaign_name=campaignName)
   		except ObjectDoesNotExist:
                         adGroup = AdGroup()
                         adGroup.ad_group_name = adGroupName                        
