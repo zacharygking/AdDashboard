@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
 
 def index(request):
@@ -16,6 +17,12 @@ from django.core.exceptions import ObjectDoesNotExist
 
 logging.basicConfig(level=logging.INFO)
 logging.getLogger('suds.transport').setLevel(logging.DEBUG)
+
+def login(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(username=username, password=password)
+
 
 def adgroup(request, adgroup_id):
   adgroup = get_object_or_404(AdGroup,pk=adgroup_id)

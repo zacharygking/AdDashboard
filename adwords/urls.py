@@ -20,5 +20,6 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^report/', include('report.urls')),
     url(r'', include('report.urls')),
+    url(r'^fb/', include('fb.urls')),
 ]
 

@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^generate/(?P<time_id>[0-9]+)/', views.main, name='main'),
     url(r'^campaigns/', views.campaigns, name='campaigns'),
     url(r'^adgroups/(?P<adgroup_id>[0-9]+)', views.adgroup, name = 'adgroup'),
+    url(r'^login/', views.login, name = 'login')
     #url(r'campaigns/(?P<campaign_id>[0-9]+)', views.cdetail, name = 'cdetial'),
     ]
 
