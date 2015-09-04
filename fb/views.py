@@ -51,7 +51,7 @@ def get_report(request):
 	    			'cpc'
 	    		}
 				print(current_campaign[AdCampaign.Field.name])
-				data = str(current_campaign.get_insights(fields=fields))
+				data = str(current_campaign.get_insights(current_campaign, fields=fields))
 				data = '['+data[12:]
 				print(data)
 
