@@ -1,10 +1,11 @@
 from django.db import models
 
 class Account(models.Model):
+	account_name = models.CharField(max_length=200, default='')
 	account_id = models.CharField(max_length=200,default='')
 	
 	def __str__(self):
-		return self.account_id
+		return self.account_name
 		
 class Campaign(models.Model):
 	name = models.CharField(max_length=200, default='')
