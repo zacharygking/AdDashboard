@@ -59,15 +59,12 @@ def get_report(request):
     			AdCampaign.Field.id,
     		])
 			fields = {
-    			#'account_id',
     			'impressions',
     			'clicks',
     			'cpc'
     		}
-			#print(current_campaign[AdCampaign.Field.name])
 			data = str(current_campaign.get_insights(fields=fields))
 			data = '['+data[12:]
-			#print(data)
 			try:
 				ast.literal_eval(data)
 				json_string = json.dumps(data)
