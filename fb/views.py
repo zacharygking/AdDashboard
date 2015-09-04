@@ -46,7 +46,7 @@ def get_report(request):
 		])
 		
 		account_model = Account()
-		account_model.accid = str(current_account[AdAccount.Field.account_id])
+		account_model.account_id = str(current_account[AdAccount.Field.account_id])
 		account_model.save()
 		
 		ad_campaigns = current_account.get_ad_campaigns()
@@ -77,7 +77,7 @@ def get_report(request):
 			
 			campaign_model = Campaign()
 			campaign_model.name = str(current_campaign[AdCampaign.Field.name])
-			campaign_model.camid = str(current_campaign[AdCampaign.Field.id])
+			campaign_model.campaign_id = str(current_campaign[AdCampaign.Field.id])
 			campaign_model.status = str(current_campaign[AdCampaign.Field.status])
 			campaign_model.clicks = int(parsed_data[0]['clicks'])
 			campaign_model.cpc = float(parsed_data[0]['cpc'])
