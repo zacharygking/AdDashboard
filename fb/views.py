@@ -10,7 +10,7 @@ import ast
 from fb.models import Account, Campaign
 
 def index(request):
-	return HttpResponse('jsung')
+	return HttpResponse('not done yet')
 
 def get_report(request):
 	
@@ -43,16 +43,15 @@ def get_report(request):
 		
 		current_account.remote_read(fields=[
 				AdAccount.Field.account_id,
+				AdAccount.Field.name,
 		])
 		
 		account_model = Account()
+		account_model.account_name = str(current_account[AdAccount.Field.name])
 		account_model.account_id = str(current_account[AdAccount.Field.account_id])
 		account_model.save()
 		
-		try:
-			ad_campaigns = current_account.get_ad_campaigns()
-		except:
-			continue
+		ad_campaigns = current_account.get_ad_campaigns()
 				
 		for current_campaign in ad_campaigns:
 		
@@ -61,7 +60,7 @@ def get_report(request):
     			AdCampaign.Field.status,
     			AdCampaign.Field.id,
     		])
-			fields = {
+			fields = {    			
     			'impressions',
     			'clicks',
     			'cpc'
