@@ -54,8 +54,11 @@ def get_report(request):
 				data = str(current_campaign.get_insights(fields=fields))
 				data = '['+data[12:]
 				print(data)
+
 				ast.literal_eval(data)
 				json_string = json.dumps(data)
 				parsed_data = json.loads(data)
 				print(parsed_data[0]['clicks'])
 		except:
+				pass
+
