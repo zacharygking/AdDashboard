@@ -10,7 +10,7 @@ import ast
 from fb.models import Account, Campaign
 
 def index(request):
-	return HttpResponse('jsung')
+	return HttpResponse('not done yet')
 
 def accounts(request):
 	return HttpResponse('jsonge')
@@ -46,10 +46,12 @@ def get_report(request):
 		
 		current_account.remote_read(fields=[
 				AdAccount.Field.account_id,
+				AdAccount.Field.name,
 		])
 		
 		account_model = Account()
-		account_model.accid = str(current_account[AdAccount.Field.account_id])
+		account_model.account_name = str(current_account[AdAccount.Field.name])
+		account_model.account_id = str(current_account[AdAccount.Field.account_id])
 		account_model.save()
 		
 		ad_campaigns = current_account.get_ad_campaigns()
@@ -61,16 +63,13 @@ def get_report(request):
     			AdCampaign.Field.status,
     			AdCampaign.Field.id,
     		])
-			fields = {
-    			#'account_id',
+			fields = {    			
     			'impressions',
     			'clicks',
     			'cpc'
     		}
-			#print(current_campaign[AdCampaign.Field.name])
 			data = str(current_campaign.get_insights(fields=fields))
 			data = '['+data[12:]
-			#print(data)
 			try:
 				ast.literal_eval(data)
 				json_string = json.dumps(data)
@@ -80,7 +79,7 @@ def get_report(request):
 			
 			campaign_model = Campaign()
 			campaign_model.name = str(current_campaign[AdCampaign.Field.name])
-			campaign_model.camid = str(current_campaign[AdCampaign.Field.id])
+			campaign_model.campaign_id = str(current_campaign[AdCampaign.Field.id])
 			campaign_model.status = str(current_campaign[AdCampaign.Field.status])
 			campaign_model.clicks = int(parsed_data[0]['clicks'])
 			campaign_model.cpc = float(parsed_data[0]['cpc'])

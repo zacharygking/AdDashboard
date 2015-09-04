@@ -1,14 +1,15 @@
 from django.db import models
 
 class Account(models.Model):
-	accid = models.CharField(max_length=200,default='')
+	account_name = models.CharField(max_length=200, default='')
+	account_id = models.CharField(max_length=200,default='')
 	
 	def __str__(self):
-		return self.accid
+		return self.account_name
 		
 class Campaign(models.Model):
 	name = models.CharField(max_length=200, default='')
-	camid = models.CharField(max_length=200, default='')
+	campaign_id = models.CharField(max_length=200, default='')
 	status = models.CharField(max_length=200, default='')
 	clicks = models.IntegerField(default=0)
 	cpc = models.FloatField(default=0)
