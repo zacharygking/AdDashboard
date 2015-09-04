@@ -49,7 +49,10 @@ def get_report(request):
 		account_model.account_id = str(current_account[AdAccount.Field.account_id])
 		account_model.save()
 		
-		ad_campaigns = current_account.get_ad_campaigns()
+		try:
+			ad_campaigns = current_account.get_ad_campaigns()
+		except:
+			continue
 				
 		for current_campaign in ad_campaigns:
 		
