@@ -12,6 +12,9 @@ from fb.models import Account, Campaign
 def index(request):
 	return HttpResponse('jsung')
 
+def accounts(request):
+	return HttpResponse('jsonge')
+
 def get_report(request):
 	
 	Campaign.objects.all().delete()
