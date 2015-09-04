@@ -4,6 +4,7 @@ from facebookads.api import FacebookAdsApi
 from facebookads import objects
 from facebookads.objects import AdAccount
 from facebookads.objects import AdCampaign
+from allauth.socialaccount.models import SocialToken, SocialAccount
 import json
 import ast
 
@@ -35,24 +36,26 @@ def get_report(request):
 		if len(ad_campaigns) == 0:
 			return HttpResponse("no Campaigns Exist")
 		
-		for current_campaign in ad_campaigns:
-			current_campaign.remote_read(fields=[
-				AdCampaign.Field.name,
-    			AdCampaign.Field.objective,
-    			AdCampaign.Field.status,
-    			AdCampaign.Field.id,
-    		])
-			fields = {
-    			'account_id',
-    			'impressions',
-    			'clicks',
-    			'cpc'
-    		}
-			print(current_campaign[AdCampaign.Field.name])
-			data = str(current_campaign.get_insights(fields=fields))
-			data = '['+data[12:]
-			print(data)
-			ast.literal_eval(data)
-			json_string = json.dumps(data)
-			parsed_data = json.loads(data)
-			print(parsed_data[0]['clicks'])
+		try:
+			for current_campaign in ad_campaigns:
+				current_campaign.remote_read(fields=[
+					AdCampaign.Field.name,
+	    			AdCampaign.Field.objective,
+	    			AdCampaign.Field.status,
+	    			AdCampaign.Field.id,
+	    		])
+				fields = {
+	    			'account_id',
+	    			'impressions',
+	    			'clicks',
+	    			'cpc'
+	    		}
+				print(current_campaign[AdCampaign.Field.name])
+				data = str(current_campaign.get_insights(fields=fields))
+				data = '['+data[12:]
+				print(data)
+				ast.literal_eval(data)
+				json_string = json.dumps(data)
+				parsed_data = json.loads(data)
+				print(parsed_data[0]['clicks'])
+		except:
