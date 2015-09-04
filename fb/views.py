@@ -41,30 +41,29 @@ def get_report(request):
 		if len(ad_campaigns) == 0:
 			return HttpResponse("no Campaigns Exist")
 		
-		try:
-			for current_campaign in ad_campaigns:
-				current_campaign.remote_read(fields=[
-					AdCampaign.Field.name,
-	    			AdCampaign.Field.objective,
-	    			AdCampaign.Field.status,
-	    			AdCampaign.Field.id,
-	    		])
-				fields = {
-	    			'account_id',
-	    			'impressions',
-	    			'clicks',
-	    			'cpc'
-	    		}
-				print(current_campaign[AdCampaign.Field.name])
-				data = str(current_campaign.get_insights(current_campaign, fields=fields))
-				data = '['+data[12:]
-				print(data)
-
+		for current_campaign in ad_campaigns:
+			current_campaign.remote_read(fields=[
+				AdCampaign.Field.name,
+    			AdCampaign.Field.objective,
+    			AdCampaign.Field.status,
+    			AdCampaign.Field.id,
+    		])
+			fields = {
+    			'account_id',
+    			'impressions',
+    			'clicks',
+    			'cpc'
+    		}
+			print(current_campaign[AdCampaign.Field.name])
+			data = str(current_campaign.get_insights(fields=fields))
+			data = '['+data[12:]
+			print(data)
+			try:
 				ast.literal_eval(data)
 				json_string = json.dumps(data)
 				parsed_data = json.loads(data)
 				print(parsed_data[0]['clicks'])
-		except:
+			except:
 				pass
 	
 	return HttpResponse("success")
