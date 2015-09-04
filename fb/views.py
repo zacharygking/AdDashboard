@@ -15,7 +15,7 @@ def index(request):
 def get_report(request):
 
   #check if user is authenticated
-  if(!request.user.is_authenticated()):
+  if not request.user.is_authenticated():
 	  return render(request, 'account/login.html')	
 
   #setting the user information
