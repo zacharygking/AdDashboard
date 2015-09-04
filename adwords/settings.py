@@ -39,6 +39,12 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'report',
     'fb',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
+
 )
 
 MIDDLEWARE_CLASSES = (
@@ -70,6 +76,12 @@ TEMPLATES = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = (
+                           'django.contrib.auth.backends.ModelBackend',
+                           'allauth.account.auth_backends.AuthenticationBackend',
+                           )
+
+
 WSGI_APPLICATION = 'adwords.wsgi.application'
 
 
@@ -81,6 +93,25 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
+}
+
+
+SOCIALACCOUNT_PROVIDERS = \
+{
+    'facebook':
+    {   'SCOPE': ['ads_read'],
+        'AUTH_PARAMS': {'auth_type':'reauthenticate'},
+        'METHOD': 'oauth2',
+        'FIELDS': [
+                   'id',
+                   'email',
+                   'name',
+                   'updated_time',
+                   ],
+                   'EXCHANGE_TOKEN': True,
+                   'VERSION': 'v2.4',
+                       #'LOCALE_FUNC': lamba request: return 'en_US'
+                       },
 }
 
 
@@ -97,8 +128,19 @@ USE_L10N = True
 
 USE_TZ = True
 
+ACCOUNT_AUTHENTICATION_METHOD = 'username'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = False
+ACCOUNT_EMAIL_SUBJECT_PREFIX = '[q4ts]'
+ACCOUNT_PASSWORD_MIN_LENGTH = 6
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+SITE_ID = 1
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+
+LOGIN_REDIRECT_URL = '/'
