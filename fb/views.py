@@ -7,12 +7,16 @@ from facebookads.objects import AdCampaign
 from allauth.socialaccount.models import SocialToken, SocialAccount
 import json
 import ast
+from fb.models import Account, Campaign
 
 def index(request):
 	return HttpResponse('jsung')
 
 def get_report(request):
-
+	
+	Campaign.objects.all().delete()
+	Account.objects.all().delete()
+	
 	#check if user is authenticated
 	if not request.user.is_authenticated():
 		return render(request, 'account/login.html')	
@@ -37,34 +41,49 @@ def get_report(request):
 			break
 		index = index + 1
 		
-		ad_campaigns = current_account.get_ad_campaigns()
-		if len(ad_campaigns) == 0:
-			return HttpResponse("no Campaigns Exist")
+		current_account.remote_read(fields=[
+				AdAccount.Field.account_id,
+		])
 		
+		account_model = Account()
+		account_model.accid = str(current_account[AdAccount.Field.account_id])
+		account_model.save()
+		
+		ad_campaigns = current_account.get_ad_campaigns()
+				
 		for current_campaign in ad_campaigns:
+		
 			current_campaign.remote_read(fields=[
 				AdCampaign.Field.name,
-    			AdCampaign.Field.objective,
     			AdCampaign.Field.status,
     			AdCampaign.Field.id,
     		])
 			fields = {
-    			'account_id',
+    			#'account_id',
     			'impressions',
     			'clicks',
     			'cpc'
     		}
-			print(current_campaign[AdCampaign.Field.name])
+			#print(current_campaign[AdCampaign.Field.name])
 			data = str(current_campaign.get_insights(fields=fields))
 			data = '['+data[12:]
-			print(data)
+			#print(data)
 			try:
 				ast.literal_eval(data)
 				json_string = json.dumps(data)
-				parsed_data = json.loads(data)
-				print(parsed_data[0]['clicks'])
+				parsed_data = json.loads(data)				
 			except:
-				pass
+				continue
+			
+			campaign_model = Campaign()
+			campaign_model.name = str(current_campaign[AdCampaign.Field.name])
+			campaign_model.camid = str(current_campaign[AdCampaign.Field.id])
+			campaign_model.status = str(current_campaign[AdCampaign.Field.status])
+			campaign_model.clicks = int(parsed_data[0]['clicks'])
+			campaign_model.cpc = float(parsed_data[0]['cpc'])
+			campaign_model.impressions = int(parsed_data[0]['impressions'])
+			campaign_model.account = account_model
+			campaign_model.save()
 	
 	return HttpResponse("success")
 		
