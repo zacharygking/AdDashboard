@@ -1,13 +1,8 @@
+#!/usr/bin/python
+
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
-
-def index(request):
-	return render(request, 'report/index.html')
-#!/usr/bin/python
-
-#Google copyright
-
 import logging
 import sys
 import xml.etree.ElementTree as ET
@@ -18,6 +13,11 @@ from django.core.exceptions import ObjectDoesNotExist
 logging.basicConfig(level=logging.INFO)
 logging.getLogger('suds.transport').setLevel(logging.DEBUG)
 
+
+def index(request):
+	return render(request, 'report/index.html')
+
+
 def login(request):
     username = request.POST['username']
     password = request.POST['password']
@@ -27,6 +27,7 @@ def login(request):
 def adgroup(request, adgroup_id):
   adgroup = get_object_or_404(AdGroup,pk=adgroup_id)
   return render(request, 'report/adgroups.html', {'adgroup' : adgroup})
+
 
 def campaigns(request):
   try:
