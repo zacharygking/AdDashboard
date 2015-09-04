@@ -30,8 +30,13 @@ def get_report(request):
   
 	if len(my_accounts) == 0:
 		return HttpResponse("no Ad Accounts Exist")
-  
+	index = 0
+  	
 	for current_account in my_accounts:
+		if index == 5:
+			break
+		index = index + 1
+		
 		ad_campaigns = current_account.get_ad_campaigns()
 		if len(ad_campaigns) == 0:
 			return HttpResponse("no Campaigns Exist")
@@ -61,4 +66,6 @@ def get_report(request):
 				print(parsed_data[0]['clicks'])
 		except:
 				pass
-
+	
+	return HttpResponse("success")
+		
