@@ -3,6 +3,7 @@ from django.db import models
 class Account(models.Model):
 	account_name = models.CharField(max_length=200, default='')
 	account_id = models.CharField(max_length=200,default='')
+	account_cost = models.FloatField(default=0)
 	
 	def __str__(self):
 		return self.account_name
