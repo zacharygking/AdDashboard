@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import Google, Facebook
 
-# Register your models here.
+admin.site.register(Google)
+admin.site.register(Facebook)
