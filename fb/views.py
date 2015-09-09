@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from facebookads.api import FacebookAdsApi
 from facebookads import objects
@@ -13,7 +13,13 @@ def index(request):
 	return HttpResponse('not done yet')
 
 def accounts(request):
-	return HttpResponse('jsonge')
+	accounts = Account.objects.all()
+	return render(request, 'fb/accounts.html', {'accounts':accounts})
+
+def campaigns(request, cid):
+	account = Account.objects.get(account_id=cid)
+		#return HttpResponse("something went wrong")
+	return render(request, 'fb/campaigns.html', {'account': account})
 
 def get_report(request):
 	

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<body>
+<center>
+<h3> Select the Account to show results for </h3>
+<table border=1>
+	{% for acc in accounts %}
+	<tr><td>
+		<center><a href="/facebook/campaigns/{{acc.account_id}}"> {{ acc.account_name }} </a></center>
+	</td></tr>
+	{% endfor %}
+</table>
+</center>
+</body>
+</html>

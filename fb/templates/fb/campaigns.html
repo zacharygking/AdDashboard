@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<body>
+<center>
+	<h3> Current Account: {{account.account_name}} </h3>
+	<br>
+<table border=1>
+	<tr><strong>
+		<td> Campaign Name </td>
+		<td> CPC </td>
+		<td> Clicks </td>
+		<td> impressions </td>
+	</tr></strong>
+	{% for campaign in account.campaign_set.all %}
+	<tr>
+		<td> {{campaign.name}} </td>
+		<td> {{campaign.cpc}} </td>
+		<td> {{campaign.clicks}} </td>
+		<td> {{campaign.impressions}} </td>
+	</tr>
+	{% endfor %}
+</center>
+</body>
+</html>
