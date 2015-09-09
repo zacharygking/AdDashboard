@@ -53,11 +53,13 @@ def get_report(request):
 		current_account.remote_read(fields=[
 				AdAccount.Field.account_id,
 				AdAccount.Field.name,
+				AdAccount.Field.amount_spent,
 		])
 		
 		account_model = Account()
 		account_model.account_name = str(current_account[AdAccount.Field.name])
 		account_model.account_id = str(current_account[AdAccount.Field.account_id])
+		account_model.account_cost = str(float(current_account[AdAccount.Field.amount_spent])/100)
 		account_model.save()
 		
 		ad_campaigns = current_account.get_ad_campaigns()
