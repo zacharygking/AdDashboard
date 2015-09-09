@@ -1,0 +1,12 @@
+<center><h3> Campaign: {{ Campaign.campaign_name }} </h3>	
+<h3> Select the Ad Group to show data for  </h3>
+	<table border=1>
+		{% for adgroup in Campaign.adgroup_set.all %}
+   			<tr>
+    			<td>
+        			<center><a href ="/report/adgroups/{{adgroup.id}}/">{{ adgroup.ad_group_name }}</a></center>
+        		</td>
+    		</tr>
+ 		{% endfor %}
+	</table>
+</center>

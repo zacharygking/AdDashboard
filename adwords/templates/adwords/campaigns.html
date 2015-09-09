@@ -1,0 +1,12 @@
+<center><h3> {{ 'Select the Campaign to Report About' }} </h3>
+<table border=1>
+    {% for campaign in campaigns %}
+    <tr>
+    	<td>
+        	<center><a href ="/report/{{ campaign.id }}/">{{ campaign.campaign_name }}</a></center>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+</center>
+
