@@ -21,10 +21,10 @@ class AdGroup(models.Model):
          return self.ad_group_name
          
 class Keyword(models.Model):
-     keyword_id = models.IntegerField(default=0)
+     keyword_id = models.BigIntegerField(default=0)
      keyword_placement = models.CharField(max_length=200,default='')
-     clicks = models.IntegerField(default = 0)
-     impressions = models.IntegerField(default = 0)
+     clicks = models.BigIntegerField(default = 0)
+     impressions = models.BigIntegerField(default = 0)
      cost = models.FloatField(default = 0.0)
      adgroup = models.ForeignKey(AdGroup)
      def __str__(self):
