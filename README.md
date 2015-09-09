@@ -6,3 +6,4 @@ Dependencies
 -facebook python SDK
 -django
 -allauth
+-psycopg2
