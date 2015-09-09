@@ -22,5 +22,6 @@ urlpatterns = [
     url(r'', include('report.urls')),
     url(r'^facebook/', include('fb.urls')),
     url(r'^accounts/', include('allauth.urls')),
+    url(r'^spreadsheet/', include('spreadsheet.urls')),
 ]
 
