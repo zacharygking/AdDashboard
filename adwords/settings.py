@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'report',
     'fb',
+    'spreadsheet',
     'django.contrib.sites',
     'allauth',
     'allauth.account',
