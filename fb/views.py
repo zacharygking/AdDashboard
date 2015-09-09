@@ -33,7 +33,7 @@ def get_report(request):
 	#setting the user information
 	my_app_id = '1604519246476149'
 	my_app_secret = '5a93aee73f1d2856dd542f53e268e483'
-	current_user = SocialAccount.objects.get(user=request.user)
+	current_user = SocialAccount.objects.get(user=request.user, provider='facebook')
 	current_token = SocialToken.objects.get(account=current_user)
 	my_access_token = current_token.token
   

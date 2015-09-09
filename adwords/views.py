@@ -15,7 +15,8 @@ logging.getLogger('suds.transport').setLevel(logging.DEBUG)
 
 
 def index(request):
-	return render(request, 'adwords/index.html')
+  fb_acc = SocialAccount.objects.get(user=request.user, provider='twitter')
+	return render(request, 'report/index.html', fb_acc)
 
 
 def login(request):
@@ -26,20 +27,20 @@ def login(request):
 
 def adgroup(request, adgroup_id):
   adgroup = get_object_or_404(AdGroup,pk=adgroup_id)
-  return render(request, 'adwords/adgroups.html', {'adgroup' : adgroup})
+  return render(request, 'report/adgroups.html', {'adgroup' : adgroup})
 
 
 def campaigns(request):
   try:
     campaign_list = Campaign.objects.all()
-    return render(request, 'adwords/campaigns.html', {'campaigns': campaign_list})
+    return render(request, 'report/campaigns.html', {'campaigns': campaign_list})
   except ObjectDoesNotExist:
     return HttpResponse("No Campaigns Exist")
 
 
 def result(request, campaign_id):
   campaign = get_object_or_404(Campaign, pk=campaign_id)
-  return render(request, 'adwords/main.html',{'Campaign': campaign})
+  return render(request, 'report/main.html',{'Campaign': campaign})
 
 
 def main(request, time_id):

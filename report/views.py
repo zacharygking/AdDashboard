@@ -9,13 +9,30 @@ import xml.etree.ElementTree as ET
 from googleads import adwords
 from report.models import Account, Campaign, AdGroup, Keyword
 from django.core.exceptions import ObjectDoesNotExist
+from allauth.socialaccount.models import SocialToken, SocialAccount
 
 logging.basicConfig(level=logging.INFO)
 logging.getLogger('suds.transport').setLevel(logging.DEBUG)
 
 
 def index(request):
-	return render(request, 'report/index.html')
+  try:
+    fb_acc = SocialAccount.objects.get(user_id = request.user.id,provider='facebook')
+    try:
+      google_acc = SocialAccount.objects.get(user_id = request.user.id,provider='google')
+      loginlist = [True,True]
+    except ObjectDoesNotExist:
+      loginlist = [True,False]
+  except ObjectDoesNotExist:
+    try:
+      google_acc = SocialAccount.objects.get(user_id = request.user.id,provider='google')
+      loginlist = [False,True]
+    except ObjectDoesNotExist:
+      loginlist = [False,False]
+
+
+
+  return render(request, 'report/index.html', {'fb' : loginlist[0], 'google' : loginlist[1]})
 
 
 def login(request):
