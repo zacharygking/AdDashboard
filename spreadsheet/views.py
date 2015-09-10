@@ -3,8 +3,6 @@ from django.http import HttpResponse
 from fb.models import Campaign, Account
 from report.models import Keyword
 from .models import Metric
-from django import forms
-from django.template import RequestContext
 import django_excel as excel
 import pyexcel.ext.xls
 
