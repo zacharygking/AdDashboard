@@ -7,3 +7,5 @@ Dependencies
 -django
 -allauth
 -psycopg2
+-django-excel
+-pyexcel

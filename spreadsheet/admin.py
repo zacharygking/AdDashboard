@@ -1,5 +1,4 @@
 from django.contrib import admin
-from .models import Google, Facebook
+from .models import Source
 
-admin.site.register(Google)
-admin.site.register(Facebook)
+admin.site.register(Source)

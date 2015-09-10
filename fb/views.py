@@ -67,7 +67,7 @@ def get_report(request):
 		for current_campaign in ad_campaigns:
 		
 			current_campaign.remote_read(fields=[
-				AdCampaign.Field.name,
+			AdCampaign.Field.name,
     			AdCampaign.Field.status,
     			AdCampaign.Field.id,
     		])
