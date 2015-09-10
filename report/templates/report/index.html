@@ -31,9 +31,26 @@ function WinOpen() {
 
 </style>
 <script type="text/javascript">
-   if (window.location.hash == '#_=_') {
-      window.location.hash = '';
-   }
+/*if (window.location.hash == '#_=_'){
+
+    // Check if the browser supports history.replaceState.
+    if (history.replaceState) {
+
+        // Keep the exact URL up to the hash.
+        var cleanHref = window.location.href.split('#')[0];
+
+        // Replace the URL in the address bar without messing with the back button.
+        history.replaceState(null, null, cleanHref);
+
+    } else {
+
+        // Well, you're on an old browser, we can get rid of the _=_ but not the #.
+        window.location.hash = '';
+
+    }
+
+}*/
+history.pushState('', document.title, window.location.pathname);
 </script>
 <head>
     <title>
@@ -63,7 +80,6 @@ function WinOpen() {
       {% endif %}
     {% else %}
       <font color="red"> Your Account is not linked with a Facebook account <br></font>
-      click <a href="/accounts/social/connections/"> here </a> to link an account <br>
       {% if google %}
       <font color="green"> Your Account is linked with a Google account <br></font>
       {% else %}
@@ -72,7 +88,14 @@ function WinOpen() {
       {% endif %}
     {% endif %}
   {% else %}
-    <h3> You are not logged in <br> <a href ="/accounts/login"> Click Here to Login </a></h3>
+    <h3><font color="red"> You are not logged in </font>
+      <br>
+    <a href ="/accounts/login"> Click Here to Login </a>
+      <br>
+      <br> 
+    In order to use the Dashboards reporting tools, an <br>account linked to Facebook and Google is necessary
+    </h3>
+
 
   {% endif %}
 <!--

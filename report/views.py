@@ -16,27 +16,27 @@ logging.basicConfig(level=logging.INFO)
 logging.getLogger('suds.transport').setLevel(logging.DEBUG)
 
 def collect(request,start_date,end_date):
-  return HttpResponse("report for: " + start_date + '-' + end_date)
+  i_y = start_date[0] + start_date[1] + start_date[2] + start_date[3]
+  i_m = start_date[5] + start_date[6]
+  i_d = start_date[8] + start_date[9]
 
-def get_date(request):
-    if request.method == 'GET':
-        form = DateForm()
-    else:
-        # A POST request: Handle Form Upload
-        form = DateForm(request.POST) # Bind data from request.POST into a PostForm
- 
-        # If data is valid, proceeds to create a new post and redirect the user
-        if form.is_valid():
-            content = form.cleaned_data['content']
-            created_at = form.cleaned_data['created_at']
-            post = m.Post.objects.create(content=content,
-                                         created_at=created_at)
-            return HttpResponseRedirect(reverse('post_detail',
-                                                kwargs={'post_id': post.id}))
- 
-    return render(request, 'post/post_form_upload.html', {
-        'form': form,
-    })
+  f_y = end_date[0] + end_date[1] + end_date[2] + end_date[3]
+  f_m = end_date[5] + end_date[6]
+  f_d = end_date[8] + end_date[9]
+  try:
+    fb_acc = SocialAccount.objects.get(user_id = request.user.id,provider='facebook')
+    google_acc = SocialAccount.objects.get(user_id = request.user.id,provider='google')
+    fb_tok = SocialToken.objects.get(account=fb_acc)
+    google_tok = SocialToken.objects.get(account=google_acc)
+  except:
+    return HttpResponse("error connecting Social Accounts")
+
+
+
+  response = "i_y = " + i_y + " i_d = " + i_d + " i_m = " + i_m + '<br>' + "f_y = " + f_y + " f_d = " + f_d + " f_m = " + f_m
+  response = response + "<br><u> FACEBOOK TOKEN </u><br>" + fb_tok.token + "<u> GOOGLE TOKEN </u><br>" + google_tok.token
+  return HttpResponse(response)
+
 def index(request):
   try:
     fb_acc = SocialAccount.objects.get(user_id = request.user.id,provider='facebook')
