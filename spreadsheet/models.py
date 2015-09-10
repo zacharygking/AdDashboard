@@ -1,6 +1,6 @@
 from django.db import models
 
-class Metric(models.Model):
+class Source(models.Model):
 	name = models.CharField(max_length=200,default='')
 	clicks = models.IntegerField(default=0)
 	impressions = models.IntegerField(default=0)
