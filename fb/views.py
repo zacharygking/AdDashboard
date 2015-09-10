@@ -95,5 +95,5 @@ def get_report(request):
 			campaign_model.account = account_model
 			campaign_model.save()
 	
-	return HttpResponse("success")
+	return HttpResponse("Good Humes")
 		

@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script language="JavaScript">
+<!--
+function WinOpen() {
+  var url=document.redirect.selection.value
+  document.location.href=url
+
+}
+
+// -->
+</script>
 <style type ="text/css">
 .btn {
   -webkit-border-radius: 28;
@@ -36,6 +46,14 @@
       <font color="green"> Your account is linked with a Facebook account <br></font>
       {% if google %}
       <font color="green"> Your account is linked with a Google account <br></font>
+        <form>
+          <p>Start Date: <input type="date" id="start_date" name="start_date" /></p>
+          <p>Start Date:<input type="date" id="end_date" name="end_date"/></p>
+          <input type="submit" onclick="window.location = window.location + 'report/generate/' + start_date.value + '/' + end_date.value; return false;"/>
+        </form>
+        <br> or
+        <br> <a href = "/report/generate/3"> Generate an all time report </a>
+        <br> <a href = "/report/generate/2"> Generate a report for the last month </a>
       {% else %}
       <font color="red"> Your Account is not linked with a Google account <br></font>
       {% endif %}
@@ -47,12 +65,20 @@
       {% else %}
       <font color="red"> Your Account is not linked with a Google account <br></font>
       {% endif %}
-      click <a href="/accounts/social/connections/"> here </a> to link an account
+      click <a href="/accounts/social/connections/"> here </a> to link an account <br>
+      <!-- <form method="POST" onsubmit="location.href='' document.getElementById('start_date').value + document.getElementById('end_date').value; return false;">
+       {% csrf_token %}        
+        <p>Start date: <input type = 'date'  name='start_date' ></p>
+        <p>End date: <input type = 'date'  name='end_date' ></p>
+      <button type="submit">Submit</button>
+      </form> -->
+
     {% endif %}
   {% else %}
     <h3> You are not logged in <br> <a href ="/accounts/login"> Click Here to Login </a></h3>
-  {% endif %}
 
+  {% endif %}
+<!--
 <h2> {{ 'GoogleAds'}} </h2>
   <h3> Generate a GoogleAds Report: </h3>
     <a href="/report/generate/1" class="btn"> 7 Days </a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -69,7 +95,7 @@
   <h3> View Results of Latest Report: </h3>
     <a href="/facebook/accounts" class="btn"> View Report </a>
 
-
+-->
 </center>
 </body>
 </html>
