@@ -2,12 +2,12 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from fb.models import Campaign, Account
 from report.models import Keyword
-from .models import Metric
+from .models import Source
 import django_excel as excel
 import pyexcel.ext.xls
 
 def main(request):
-	Metric.objects.all().delete()
+	Source.objects.all().delete()
 	
 	google_clicks = 0
 	google_impressions = 0
@@ -22,7 +22,7 @@ def main(request):
 		google_impressions = google_impressions + current_google.impressions
 		google_cost = google_cost + current_google.cost
 	
-	google_model = Metric()
+	google_model = Source()
 	google_model.name = 'Google'
 	google_model.clicks = google_clicks
 	google_model.impressions = google_impressions
@@ -36,7 +36,7 @@ def main(request):
 	for current_facebook in Account.objects.all():
 		facebook_cost = facebook_cost + current_facebook.account_cost
 		
-	facebook_model = Metric()
+	facebook_model = Source()
 	facebook_model.name = 'Facebook'
 	facebook_model.clicks = facebook_clicks
 	facebook_model.impressions = facebook_impressions
@@ -46,5 +46,5 @@ def main(request):
 	return HttpResponse('success')
 
 def download(request):
-	return excel.make_response_from_tables([Metric], 'xls')	
+	return excel.make_response_from_tables([Source], 'xls')	
 	
