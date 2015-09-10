@@ -8,3 +8,4 @@ Dependencies
 -allauth
 -psycopg2
 -django-excel
+-pyexcel
