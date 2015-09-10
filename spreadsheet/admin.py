@@ -1,4 +1,4 @@
 from django.contrib import admin
-from .models import Metric
+from .models import Source
 
-admin.site.register(Metric)
+admin.site.register(Source)
