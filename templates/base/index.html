@@ -58,11 +58,13 @@ function WinOpen() {
         <br> <a href = "/report/generate/2"> Generate a report for the last month </a>
       {% else %}
       <font color="red"> Your Account is not linked with a Google account <br></font>
+      click <a href="/accounts/social/connections/"> here </a> to link an account <br>
       {% endif %}
     {% else %}
       <font color="red"> Your Account is not linked with a Facebook account <br></font>
       {% if google %}
       <font color="green"> Your Account is linked with a Google account <br></font>
+      click <a href="/accounts/social/connections/"> here </a> to link an account <br>
       {% else %}
       <font color="red"> Your Account is not linked with a Google account <br></font>
       click <a href="/accounts/social/connections/"> here </a> to link an account <br>
