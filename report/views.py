@@ -253,11 +253,9 @@ def index(request):
 
   return render(request, 'report/index.html', {'fb' : loginlist[0], 'google' : loginlist[1]})
 
-
 def select(request):
   report = Report.objects.get(user=request.user.username)
   return render(request, 'report/select.html', {'Report': report})
-
 
 def adgroup(request, adgroup_id):
   adgroup = get_object_or_404(GoogleAdGroup,pk=adgroup_id)

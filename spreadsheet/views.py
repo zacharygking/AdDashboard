@@ -31,9 +31,7 @@ def main(request):
 	for current_facebook in FacebookCampaign.objects.all():
 		facebook_clicks = facebook_clicks + current_facebook.clicks
 		facebook_impressions = facebook_impressions + current_facebook.impressions
-	
-	for current_facebook in FacebookAccount.objects.all():
-		facebook_cost = facebook_cost + current_facebook.account_cost
+		facebook_cost = facebook_cost + current_facebook.cost
 		
 	facebook_model = Source()
 	facebook_model.name = 'Facebook'
