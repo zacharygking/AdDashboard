@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from fb.models import Campaign, Account
-from report.models import Keyword
+from report.models import GoogleKeyword
 from .models import Source
 import django_excel as excel
 import pyexcel.ext.xls
@@ -17,7 +17,7 @@ def main(request):
 	facebook_impressions = 0
 	facebook_cost = 0
 	
-	for current_google in Keyword.objects.all():
+	for current_google in GoogleKeyword.objects.all():
 		google_clicks = google_clicks + current_google.clicks
 		google_impressions = google_impressions + current_google.impressions
 		google_cost = google_cost + current_google.cost
