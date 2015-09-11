@@ -7,7 +7,7 @@ import logging
 import sys
 import xml.etree.ElementTree as ET
 from googleads import adwords
-from report.models import Account, Campaign, AdGroup, Keyword
+from report.models import GoogleCampaign, GoogleAdGroup, GoogleKeyword
 from django.core.exceptions import ObjectDoesNotExist
 from allauth.socialaccount.models import SocialToken, SocialAccount
 from report.forms import DateForm
@@ -15,9 +15,6 @@ from report.forms import DateForm
 logging.basicConfig(level=logging.INFO)
 logging.getLogger('suds.transport').setLevel(logging.DEBUG)
 
-def select(request):
-  return HttpResponse("TODO")
-  
 def collect(request,start_date,end_date):
   i_y = start_date[0] + start_date[1] + start_date[2] + start_date[3]
   i_m = start_date[5] + start_date[6]
@@ -26,91 +23,34 @@ def collect(request,start_date,end_date):
   f_y = end_date[0] + end_date[1] + end_date[2] + end_date[3]
   f_m = end_date[5] + end_date[6]
   f_d = end_date[8] + end_date[9]
+  print (i_y+i_m+i_d)
+  print(f_y+f_m+f_d)
   try:
     fb_acc = SocialAccount.objects.get(user_id = request.user.id,provider='facebook')
     google_acc = SocialAccount.objects.get(user_id = request.user.id,provider='google')
     fb_tok = SocialToken.objects.get(account=fb_acc)
     google_tok = SocialToken.objects.get(account=google_acc)
   except:
-    return HttpResponse("error connecting Social Accounts")
+      return HttpResponse("error connecting Social Accounts")
 
-
-
-  response = "i_y = " + i_y + " i_d = " + i_d + " i_m = " + i_m + '<br>' + "f_y = " + f_y + " f_d = " + f_d + " f_m = " + f_m
-  response = response + "<br><u> FACEBOOK TOKEN </u><br>" + fb_tok.token + "<u> GOOGLE TOKEN </u><br>" + google_tok.token
-  return HttpResponse(response)
-
-def index(request):
-  try:
-    fb_acc = SocialAccount.objects.get(user_id = request.user.id,provider='facebook')
-    try:
-      google_acc = SocialAccount.objects.get(user_id = request.user.id,provider='google')
-      loginlist = [True,True]
-    except ObjectDoesNotExist:
-      loginlist = [True,False]
-  except ObjectDoesNotExist:
-    try:
-      google_acc = SocialAccount.objects.get(user_id = request.user.id,provider='google')
-      loginlist = [False,True]
-    except ObjectDoesNotExist:
-      loginlist = [False,False]
-
-
-
-  return render(request, 'report/index.html', {'fb' : loginlist[0], 'google' : loginlist[1]})
-
-
-def login(request):
-    username = request.POST['username']
-    password = request.POST['password']
-    user = authenticate(username=username, password=password)
-
-
-def adgroup(request, adgroup_id):
-  adgroup = get_object_or_404(AdGroup,pk=adgroup_id)
-  return render(request, 'report/adgroups.html', {'adgroup' : adgroup})
-
-
-def campaigns(request):
-  try:
-    campaign_list = Campaign.objects.all()
-    return render(request, 'report/campaigns.html', {'campaigns': campaign_list})
-  except ObjectDoesNotExist:
-    return HttpResponse("No Campaigns Exist")
-
-
-def result(request, campaign_id):
-  campaign = get_object_or_404(Campaign, pk=campaign_id)
-  return render(request, 'report/main.html',{'Campaign': campaign})
-
-
-def main(request, time_id):
-  Campaign.objects.all().delete()
-  AdGroup.objects.all().delete()
-  Keyword.objects.all().delete()
+  GoogleCampaign.objects.all().delete()
+  GoogleAdGroup.objects.all().delete()
+  GoogleKeyword.objects.all().delete()
   adwords_client = adwords.AdWordsClient.LoadFromStorage()
   report_downloader = adwords_client.GetReportDownloader(version='v201506')
   
-  time_id = int(time_id)
-
-  if time_id == 1:
-          date = 'LAST_7_DAYS'
-  elif time_id == 2:
-          date = 'THIS_MONTH'
-  elif time_id == 3:
-          date = 'ALL_TIME'
-  else:
-          return HttpResponse("time_id is not 1, 2, or 3")
   
   # Create report definition.
   report = {
-      'reportName': date+'_CRITERIA_PERFORMANCE_REPORT',
-      'dateRangeType': date,
+      'reportName': 'CRITERIA_PERFORMANCE_REPORT',
+      'dateRangeType': 'CUSTOM_DATE',
       'reportType': 'CRITERIA_PERFORMANCE_REPORT',
       'downloadFormat': 'XML',
       'selector': {
           'fields': ['AccountDescriptiveName', 'AdGroupName', 'CampaignName',
-                     'Id', 'Criteria', 'Impressions', 'Clicks', 'Cost']
+                     'Id', 'Criteria', 'Impressions', 'Clicks', 'Cost'],
+		  'dateRange': {'min': i_y+i_m+i_d, 
+						'max': f_y+f_m+f_d}
       }
   }
 
@@ -132,22 +72,22 @@ def main(request, time_id):
   		campaignName = row.get('campaign')
   		adGroupName = row.get('adGroup')
   		try:
-                        campaign = Campaign.objects.get(campaign_name=campaignName)
+                        campaign = GoogleCampaign.objects.get(campaign_name=campaignName)
   		except ObjectDoesNotExist:
-                        campaign = Campaign()
+                        campaign = GoogleCampaign()
                         campaign.campaign_name = campaignName
                         campaign.save()
   		try:
-                        adGroup = AdGroup.objects.get(ad_group_name=adGroupName, campaign_name=campaignName)
+                        adGroup = GoogleAdGroup.objects.get(ad_group_name=adGroupName, campaign_name=campaignName)
   		except ObjectDoesNotExist:
-                        adGroup = AdGroup()
+                        adGroup = GoogleAdGroup()
                         adGroup.ad_group_name = adGroupName                        
                          
   		adGroup.campaign = campaign
   		adGroup.campaign_name = campaignName
   		adGroup.save()
   		
-  		data = Keyword()
+  		data = GoogleKeyword()
   		data.keyword_id = row.get('keywordID')
   		data.keyword_placement = row.get('keywordPlacement')
   		data.clicks = row.get('clicks')
@@ -158,3 +98,48 @@ def main(request, time_id):
   		data.save()
 
   return campaigns(request)
+'''
+  response = "i_y = " + i_y + " i_d = " + i_d + " i_m = " + i_m + '<br>' + "f_y = " + f_y + " f_d = " + f_d + " f_m = " + f_m
+  response = response + "<br><u> FACEBOOK TOKEN </u><br>" + fb_tok.token + "<u> GOOGLE TOKEN </u><br>" + google_tok.token
+  return HttpResponse(response)
+'''
+def index(request):
+  try:
+    fb_acc = SocialAccount.objects.get(user_id = request.user.id,provider='facebook')
+    try:
+      google_acc = SocialAccount.objects.get(user_id = request.user.id,provider='google')
+      loginlist = [True,True]
+    except ObjectDoesNotExist:
+      loginlist = [True,False]
+  except ObjectDoesNotExist:
+    try:
+      google_acc = SocialAccount.objects.get(user_id = request.user.id,provider='google')
+      loginlist = [False,True]
+    except ObjectDoesNotExist:
+      loginlist = [False,False]
+
+  return render(request, 'report/index.html', {'fb' : loginlist[0], 'google' : loginlist[1]})
+
+
+def login(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(username=username, password=password)
+
+
+def adgroup(request, adgroup_id):
+  adgroup = get_object_or_404(GoogleAdGroup,pk=adgroup_id)
+  return render(request, 'report/adgroups.html', {'adgroup' : adgroup})
+
+
+def campaigns(request):
+  try:
+    campaign_list = GoogleCampaign.objects.all()
+    return render(request, 'report/campaigns.html', {'campaigns': campaign_list})
+  except ObjectDoesNotExist:
+    return HttpResponse("No Campaigns Exist")
+
+
+def result(request, campaign_id):
+  campaign = get_object_or_404(GoogleCampaign, pk=campaign_id)
+  return render(request, 'report/main.html',{'Campaign': campaign})
