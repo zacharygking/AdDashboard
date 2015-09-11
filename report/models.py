@@ -37,7 +37,6 @@ class GoogleKeyword(models.Model):
 class FacebookAccount(models.Model):
 	account_name = models.CharField(max_length=200, default='')
 	account_id = models.CharField(max_length=200,default='')
-	account_cost = models.FloatField(default=0)
 	report = models.ForeignKey(Report, blank=True, null=True)
 	
 	def __str__(self):
@@ -49,6 +48,7 @@ class FacebookCampaign(models.Model):
 	status = models.CharField(max_length=200, default='')
 	clicks = models.BigIntegerField(default=0)
 	cpc = models.FloatField(default=0)
+	cost = models.FloatField(default=0)
 	impressions = models.BigIntegerField(default=0)
 	account = models.ForeignKey(FacebookAccount)
 	
