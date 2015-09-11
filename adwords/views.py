@@ -1,11 +1,7 @@
 from django.shortcuts import render, get_object_or_404
-from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
 import logging
 import sys
-import xml.etree.ElementTree as ET
-from googleads import adwords
-from report.models import Account, Campaign, AdGroup, Keyword
 from django.core.exceptions import ObjectDoesNotExist
 from allauth.socialaccount.models import SocialToken, SocialAccount
 from report.forms import DateForm

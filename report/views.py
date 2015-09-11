@@ -120,12 +120,8 @@ def index(request):
 
   return render(request, 'report/index.html', {'fb' : loginlist[0], 'google' : loginlist[1]})
 
-
-def login(request):
-    username = request.POST['username']
-    password = request.POST['password']
-    user = authenticate(username=username, password=password)
-
+def select(request):
+  return render(request, 'report/select.html')
 
 def adgroup(request, adgroup_id):
   adgroup = get_object_or_404(GoogleAdGroup,pk=adgroup_id)
