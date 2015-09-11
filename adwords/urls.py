@@ -15,12 +15,13 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from . import views
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^report/', include('report.urls')),
-    url(r'', include('report.urls')),
-    url(r'^facebook/', include('fb.urls')),
+    url(r'^$', views.index, name="index"),
+    #url(r'^facebook/', include('fb.urls')),
     url(r'^accounts/', include('allauth.urls')),
     url(r'^spreadsheet/', include('spreadsheet.urls')),
 ]

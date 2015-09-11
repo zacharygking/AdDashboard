@@ -15,6 +15,9 @@ from report.forms import DateForm
 logging.basicConfig(level=logging.INFO)
 logging.getLogger('suds.transport').setLevel(logging.DEBUG)
 
+def select(request):
+  return HttpResponse("TODO")
+  
 def collect(request,start_date,end_date):
   i_y = start_date[0] + start_date[1] + start_date[2] + start_date[3]
   i_m = start_date[5] + start_date[6]
