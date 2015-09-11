@@ -242,11 +242,6 @@ def index(request):
 
 def select(request):
   report = Report.objects.get(user=request.user.username)
-  #return HttpResponse(report.user)
-  k = ''
-  for campaign in report.googlecampaign_set.all():
-    k += campaign.campaign_name
-  #return HttpResponse(k)
   return render(request, 'report/select.html', {'Report': report})
 
 def adgroup(request, adgroup_id):
