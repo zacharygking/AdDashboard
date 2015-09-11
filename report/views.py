@@ -29,6 +29,7 @@ logging.basicConfig(level=logging.INFO)
 logging.getLogger('suds.transport').setLevel(logging.DEBUG)
 
 def collect(request,start_date,end_date):
+
 	i_y = start_date[0] + start_date[1] + start_date[2] + start_date[3]
 	i_m = start_date[5] + start_date[6]
 	i_d = start_date[8] + start_date[9]
@@ -36,10 +37,7 @@ def collect(request,start_date,end_date):
 	f_y = end_date[0] + end_date[1] + end_date[2] + end_date[3]
 	f_m = end_date[5] + end_date[6]
 	f_d = end_date[8] + end_date[9]
-	
-	startDate = i_y+i_m+i_d
-	endDate = f_y+f_m+f_d
-	
+
 	try:
 		fb_acc = SocialAccount.objects.get(user_id = request.user.id,provider='facebook')
 		google_acc = SocialAccount.objects.get(user_id = request.user.id,provider='google')
@@ -61,11 +59,17 @@ def collect(request,start_date,end_date):
 	report_model.date_taken = datetime.now()
 	report_model.save()
 	
+	googstartDate = i_y+i_m+i_d
+	googendDate = f_y+f_m+f_d
+	
+	fbstartDate = i_y + '-' + i_m + '-' + i_d
+	fbendDate = f_y + '-' + f_m + '-' + f_d
+	
 	#get the google data
-	google_data(request, report_model, startDate, endDate)
+	google_data(request, report_model, googstartDate, googendDate)
 	
 	#get the facebook data
-	fb_data(request, report_model, fb_acc, fb_tok)
+	fb_data(request, report_model, fb_tok, fbstartDate, fbendDate)
 	return HttpResponse('I cant believe its not butter')
 
 '''
@@ -149,14 +153,12 @@ def google_data(request, report_model, startDate, endDate):
 '''
 	method does the same thing as google but it is for facebook
 '''
-def fb_data(request, report_model, fb_acc, fb_tok):	
+def fb_data(request, report_model, fb_tok, fbstartDate, fbendDate):	
 
 	#setting the user information
 	my_app_id = '1604519246476149'
 	my_app_secret = '5a93aee73f1d2856dd542f53e268e483'
-	current_user = fb_acc
-	current_token = fb_tok
-	my_access_token = current_token.token
+	my_access_token = fb_tok.token
 	
 	#gets the ad accounts in a single, pre-existing facebook account
 	FacebookAdsApi.init(my_app_id, my_app_secret, my_access_token)
@@ -177,16 +179,16 @@ def fb_data(request, report_model, fb_acc, fb_tok):
 		
 		index = index + 1
 		
-		current_account.remote_read(fields=[
+		fields=[
 			AdAccount.Field.account_id,
-			AdAccount.Field.name,
-			AdAccount.Field.amount_spent,
-		])
+			AdAccount.Field.name
+			]
+		
+		current_account.remote_read(fields=fields)
 		
 		account_model = FacebookAccount()
 		account_model.account_name = str(current_account[AdAccount.Field.name])
 		account_model.account_id = str(current_account[AdAccount.Field.account_id])
-		account_model.account_cost = str(float(current_account[AdAccount.Field.amount_spent])/100)
 		account_model.report = report_model
 		account_model.save()
 		
@@ -194,17 +196,27 @@ def fb_data(request, report_model, fb_acc, fb_tok):
 				
 		for current_campaign in ad_campaigns:
 		
-			current_campaign.remote_read(fields=[
-			AdCampaign.Field.name,
+			fields=[
+				AdCampaign.Field.name,
     			AdCampaign.Field.status,
-    			AdCampaign.Field.id,
-    		])
+    			AdCampaign.Field.id]
+				
+			params = {
+				'time_range': {
+					'since': fbstartDate,
+					'until': fbendDate,
+				}
+			}	
+		
+			current_campaign.remote_read(fields=fields,params=params)
+			
 			fields = {    			
     			'impressions',
     			'clicks',
-    			'cpc'
+    			'cpc',
+				'spend'
     		}
-			data = str(current_campaign.get_insights(fields=fields))
+			data = str(current_campaign.get_insights(fields=fields,params=params))
 			data = '['+data[12:]
 			try:
 				ast.literal_eval(data)
@@ -220,6 +232,7 @@ def fb_data(request, report_model, fb_acc, fb_tok):
 			campaign_model.clicks = int(parsed_data[0]['clicks'])
 			campaign_model.cpc = float(parsed_data[0]['cpc'])
 			campaign_model.impressions = int(parsed_data[0]['impressions'])
+			campaign_model.cost = float(parsed_data[0]['spend'])
 			campaign_model.account = account_model
 			campaign_model.save()	
  
@@ -240,14 +253,12 @@ def index(request):
 
   return render(request, 'report/index.html', {'fb' : loginlist[0], 'google' : loginlist[1]})
 
-def select(request):
-  report = Report.objects.get(user=request.user.username)
-  #return HttpResponse(report.user)
-  k = ''
-  for campaign in report.googlecampaign_set.all():
-    k += campaign.campaign_name
-  #return HttpResponse(k)
-  return render(request, 'report/select.html', {'Report': report})
+
+def login(request):
+    username = request.POST['username']
+    password = request.POST['password']
+    user = authenticate(username=username, password=password)
+
 
 def adgroup(request, adgroup_id):
   adgroup = get_object_or_404(GoogleAdGroup,pk=adgroup_id)
