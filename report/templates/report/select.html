@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+<style>
+
+</style>
 </head>
 <body>
 <center>
@@ -9,10 +12,25 @@
 	    To Continue, Select the Google AdGroup and Campaign <br> and the Facebook Account to show results for
 	    <br>
 	</h3>
-    <form>
-    	
-    </form>
-	</select>
+	<table border=1>
+	<td valign=top>
+	<form>
+    	{% for campaign in Report.googlecampaign_set.all %}
+    		<input type="radio" id="{{campaign.id}}" name="gcampaign" value="{{campaign.id}}"/>
+			<label for="{{campaign.id}}">{{campaign.campaign_name}}</label><br/>
+    	{% endfor %}
+	</td>
+	<td valign="top">
+		{% for account in Report.facebookaccount_set.all %}
+    		<input type="radio" id="{{account.id}}" name="fbacc" value="{{account.id}}"/>
+			<label for="{{account.id}}">{{account.account_name}}</label><br/>
+    	{% endfor %}
+	</td>
+	</table>
+	<input type="submit" onclick="window.location = window.location + gcampaign.value + '/' + fbacc.value; return false;"/> 
+	</form>
+
+
 </center>
 
 </body>

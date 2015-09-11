@@ -50,12 +50,11 @@ history.pushState('', document.title, window.location.pathname);
       Choose a date range to generate a report from
         <form>
           <p>Start Date: <input type="date" id="start_date" name="start_date" /></p>
-          <p>Start Date:<input type="date" id="end_date" name="end_date"/></p>
+          <p>End Date:<input type="date" id="end_date" name="end_date"/></p>
           <input type="submit" onclick="window.location = window.location + 'report/generate/' + start_date.value + '/' + end_date.value; return false;"/>
         </form>
         <br> or
-        <br> <a href = "/report/generate/3"> Generate an all time report </a>
-        <br> <a href = "/report/generate/2"> Generate a report for the last month </a>
+        <br> <a href = "/report/generate/1/1/"> Generate an all time report </a>
       {% else %}
       <font color="red"> Your Account is not linked with a Google account <br></font>
       click <a href="/accounts/social/connections/"> here </a> to link an account <br>
