@@ -257,6 +257,12 @@ def select(request):
   report = Report.objects.get(user=request.user.username)
   return render(request, 'report/select.html', {'Report': report})
 
+def select_adgroup(request,gcampaign_id,fbacc_id):
+  fbacc = FacebookAccount.objects.get(pk=fbacc_id)
+  gcampaign = GoogleCampaign.objects.get(pk=gcampaign_id)
+  adgroups =  gcampaign.googleadgroup_set.all()
+  return render(request,  'report/adgroups.html', {'fbacc': fbacc, 'gcampaign': gcampaign, 'adgroups' : adgroups})
+
 def adgroup(request, adgroup_id):
   adgroup = get_object_or_404(GoogleAdGroup,pk=adgroup_id)
   return render(request, 'report/adgroups.html', {'adgroup' : adgroup})

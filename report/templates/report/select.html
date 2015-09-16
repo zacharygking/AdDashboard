@@ -2,30 +2,35 @@
 <html>
 <head>
 <style>
-
+.vertical_line{height:150px; width:1px;background:#000;}
 </style>
 </head>
 <body>
 <center>
 	<h3> Welcome to the Reporting Center
-		<br><br>
-	    To Continue, Select the Google AdGroup and Campaign <br> and the Facebook Account to show results for
-	    <br>
 	</h3>
-	<table border=1>
+	<table border=0>
+	<tr>
+		<td> Select the Google Campaign to show results for: <br><br></td>
+		<td></td><td></td><td></td><td></td><td></td>
+		<td> Select the Facebook Account to show results for <br><br></td>
+	</tr>
+	<tr>
 	<td valign=top>
 	<form>
     	{% for campaign in Report.googlecampaign_set.all %}
-    		<input type="radio" id="{{campaign.id}}" name="gcampaign" value="{{campaign.id}}"/>
+    		<input type="radio" id="{{campaign.id}}" name="gcampaign" value="{{campaign.id}}" checked="checked"/>
 			<label for="{{campaign.id}}">{{campaign.campaign_name}}</label><br/>
     	{% endfor %}
 	</td>
+	<td></td><td></td><td></td><td></td><td></td>
 	<td valign="top">
 		{% for account in Report.facebookaccount_set.all %}
-    		<input type="radio" id="{{account.id}}" name="fbacc" value="{{account.id}}"/>
+    		<input type="radio" id="{{account.id}}" name="fbacc" value="{{account.id}}" checked="checked"/>
 			<label for="{{account.id}}">{{account.account_name}}</label><br/>
     	{% endfor %}
 	</td>
+	</tr>
 	</table>
 	<input type="submit" onclick="window.location = window.location + gcampaign.value + '/' + fbacc.value; return false;"/> 
 	</form>
