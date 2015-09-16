@@ -9,6 +9,7 @@
 <center>
 	<h3> Welcome to the Reporting Center
 	</h3>
+	{% if reportowned %}
 	<table border=0>
 	<tr>
 		<td> Select the Google Campaign to show results for: <br><br></td>
@@ -17,24 +18,35 @@
 	</tr>
 	<tr>
 	<td valign=top>
+		{% if googleobjects %}
 	<form>
-    	{% for campaign in Report.googlecampaign_set.all %}
+    	{% for campaign in report.googlecampaign_set.all %}
     		<input type="radio" id="{{campaign.id}}" name="gcampaign" value="{{campaign.id}}" checked="checked"/>
 			<label for="{{campaign.id}}">{{campaign.campaign_name}}</label><br/>
     	{% endfor %}
+    	{% else %}
+    	<font color="red"> This report contains no google data,<br> to continue there must be data present. <br></font>
+    	<a href = "../../"><u> Click here to run a new report </u></a>
+
+    	{% endif %}
 	</td>
 	<td></td><td></td><td></td><td></td><td></td>
 	<td valign="top">
-		{% for account in Report.facebookaccount_set.all %}
+		{% for account in report.facebookaccount_set.all %}
     		<input type="radio" id="{{account.id}}" name="fbacc" value="{{account.id}}" checked="checked"/>
 			<label for="{{account.id}}">{{account.account_name}}</label><br/>
     	{% endfor %}
 	</td>
 	</tr>
 	</table>
+	{% if googleobjects %}
 	<input type="submit" onclick="window.location = window.location + gcampaign.value + '/' + fbacc.value; return false;"/> 
+	{% endif %}
 	</form>
-
+	{% else %}
+	The Report Stored in the Database was created by user <font color="red"> {{report.user}} </font> <br>
+	To view this report either <a href ="../../accounts/logout"> login</a> as {{report.user}} or <a href="../../"> run a new report </a> <br>
+	{% endif %}
 
 </center>
 

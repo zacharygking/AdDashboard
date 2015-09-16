@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #import for all
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from datetime import datetime
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
@@ -54,11 +54,11 @@ def collect(request,start_date,end_date):
 	if(start_date == '1' and end_date == '1'):
 		all_google_data(request, report_model)
 		all_fb_data(request, report_model, fb_tok)
-		return HttpResponse("ALL TIME REPORT")
+		return redirect("../../../view")
 	elif(start_date == '2' and end_date == '2'):
 		month_google_data(request, report_model)
 		month_fb_data(request, report_model, fb_tok)
-		return HttpResponse("MONTH REPORT")	
+		return redirect("../../../view")
 	
 	i_y = start_date[0] + start_date[1] + start_date[2] + start_date[3]
 	i_m = start_date[5] + start_date[6]
@@ -79,7 +79,7 @@ def collect(request,start_date,end_date):
 	
 	#get the facebook data
 	fb_data(request, report_model, fb_tok, fbstartDate, fbendDate)
-	return HttpResponse('I cant believe its not butter')
+	return redirect("../../../view")
 
 '''
 	method will create a report downloader implemented by google 
@@ -563,8 +563,19 @@ def index(request):
   return render(request, 'report/index.html', {'fb' : loginlist[0], 'google' : loginlist[1]})
 
 def select(request):
-  report = Report.objects.get(user=request.user.username)
-  return render(request, 'report/select.html', {'Report': report})
+  try:
+    report = Report.objects.get(user=request.user.username)
+    reportowned = True
+    if GoogleCampaign.objects.filter(report=report):
+      googleobjects = True
+    else:
+      googleobjects = False
+  except ObjectDoesNotExist:
+    report = Report.objects.get()
+    reportowned = False
+    googleobjects = False
+
+  return render(request, 'report/select.html', {'report': report, 'googleobjects': googleobjects, 'reportowned': reportowned})
 
 def select_adgroup(request,gcampaign_id,fbacc_id):
   fbacc = FacebookAccount.objects.get(pk=fbacc_id)
