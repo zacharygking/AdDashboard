@@ -370,10 +370,10 @@ def all_fb_data(request, report_model, fb_tok):
     			'impressions',
     			'clicks',
     			'cpc',
-				'spend'
+			'spend'
     		}
         
-			data = str(current_campaign.get_insights(fields=fields,params=params))
+			data = str(current_campaign.get_insights(fields=fields))
 			data = '['+data[12:]
 			try:
 				ast.literal_eval(data)
