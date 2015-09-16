@@ -40,6 +40,13 @@ def main(request):
 	facebook_model.cost = round(facebook_cost,2)
 	facebook_model.save()
 	
+	total = Source()
+	total.name = 'TOTAL'
+	total.clicks = google_model.clicks + facebook_model.clicks
+	total.impressions = google_model.impressions + facebook_model.impressions 
+	total.cost = google_model.cost + facebook_model.cost
+	total.save()
+	
 	return HttpResponse('success')
 
 def download(request):
