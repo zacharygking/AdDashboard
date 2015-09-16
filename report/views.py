@@ -223,7 +223,7 @@ def fb_data(request, report_model, fb_tok, fbstartDate, fbendDate):
     			'impressions',
     			'clicks',
     			'cpc',
-				'spend'
+			'spend'
     		}
 			data = str(current_campaign.get_insights(fields=fields,params=params))
 			data = '['+data[12:]
@@ -522,7 +522,7 @@ def month_fb_data(request, report_model, fb_tok):
     			'impressions',
     			'clicks',
     			'cpc',
-				'spend'
+			'spend'
     		}
 			
 			data = str(current_campaign.get_insights(fields=fields,params=params))
