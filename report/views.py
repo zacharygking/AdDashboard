@@ -571,6 +571,11 @@ def select_adgroup(request,gcampaign_id,fbacc_id):
   adgroups =  gcampaign.googleadgroup_set.all()
   return render(request,  'report/adgroups.html', {'fbacc': fbacc, 'gcampaign': gcampaign, 'adgroups' : adgroups})
 
+def show_results(request, gcampaign_id, fbacc_id, gadgroup_id):
+  adgroup = GoogleAdGroup.objects.get(id=gadgroup_id)
+  account = FacebookAccount.objects.get(id=fbacc_id)
+  return render(request, 'report/results.html', {'adgroup': adgroup, 'account': account})
+
 def adgroup(request, adgroup_id):
   adgroup = get_object_or_404(GoogleAdGroup,pk=adgroup_id)
   return render(request, 'report/adgroups.html', {'adgroup' : adgroup})

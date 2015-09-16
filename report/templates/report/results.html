@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<center>
+	<h3> Welcome to Your Advertisement Report </h3>
+	<h4> Google Adwords Metrics: <br><br>
+		 Campaign: <b><u>{{adgroup.campaign_name}}</b></u> <br>
+		 Adgroup: <b><u>{{adgroup.ad_group_name}}</b></u> <br><br>
+	</h4>
+	<table border=1>
+		<tr>
+			<td> Keyword </td>
+			<td> Clicks </td>
+			<td> Impressions </td>
+			<td> Cost </td>
+		</tr>
+		{% for keyword in adgroup.googlekeyword_set.all %}
+		<tr>
+			<td> {{keyword.keyword_placement}} </td>
+			<td> {{keyword.clicks}} </td>
+			<td> {{keyword.impressions}} </td>
+			<td> {{keyword.cost}} </td>
+		</tr>
+		{% endfor %}
+	</table>
+	<h4> Facebook Metrics: <br><br>
+		 Account: <b><u>{{account.account_name}}</b></u>
+
+	</h4>
+	<table border=1>
+		<tr>
+			<td> Keyword </td>
+			<td> Clicks </td>
+			<td> Impressions </td>
+			<td> Cost </td>
+		</tr>
+		{% for campaign in account.facebookcampaign_set.all %}
+		<tr>
+			<td> {{campaign.name}} </td>
+			<td> {{campaign.clicks}} </td>
+			<td> {{campaign.impressions}} </td>
+			<td> {{campaign.cost}} </td>
+		</tr>
+		{% endfor %}
+	</table>
+</center>
+</body>	
+</html>

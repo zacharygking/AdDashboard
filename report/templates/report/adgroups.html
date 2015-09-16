@@ -1,9 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
 <center>
 <h3>
 Welcome to the Reporting Center
 </h3>
-<font color="green"> Google Campaign Currently Selected: {{gcampaign.campaign_name}} <br></font>
-<font color="green"> Facebook Account Currently Selected: {{fbacc.account_name}} <br></font>
+<font color="green"> Google Campaign Currently Selected: <u><b>{{gcampaign.campaign_name}}</u></b> <br></font>
+<font color="green"> Facebook Account Currently Selected: <u><b>{{fbacc.account_name}}</u></b> <br></font>
 To continue, select a Google Adgroup to show results for:
+<form>
+	{% for adgroup in adgroups %}
+		<input type="radio" id="adgroup" name="adgroup" value="{{adgroup.id}}" checked="checked"/>
+		<label for="{{adgroup.id}}">{{adgroup.ad_group_name}}</label><br/>
+	{% endfor %}
+	<input type="submit" onclick="window.location = window.location + adgroup.value + '/'; return false;"/> 
 
+</form>
 </center>
+</body>
+</html>
