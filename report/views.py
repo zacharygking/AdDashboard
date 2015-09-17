@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from datetime import datetime
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
-from report.models import Report, GoogleClient GoogleCampaign, GoogleAdGroup, GoogleKeyword, FacebookCampaign, FacebookAccount
+from report.models import Report, GoogleClient, GoogleCampaign, GoogleAdGroup, GoogleKeyword, FacebookCampaign, FacebookAccount
 
 #import for google
 import logging
@@ -625,4 +625,5 @@ def export(request):
   return excel.make_response_from_query_sets(campaign_list, column_names, 'xls')
 
 def getid(request,start_date,end_date):
-  return render(render,'report/id.html',{'start_date': start_date, 'end_date': end_date})
+  ccid_list = GoogleClient.objects.filter(user=request.user)
+  return render(request,'report/id.html',{'start_date': start_date, 'end_date': end_date})
