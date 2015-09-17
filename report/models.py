@@ -15,6 +15,9 @@ class Source(models.Model):
 	clicks = models.IntegerField(default=0)
 	impressions = models.IntegerField(default=0)
 	cost = models.FloatField(default=0)
+	CTR = models.FloatField(default=0)
+	CPC = models.FloatField(default=0)
+	CPM = models.FloatField(default=0)
 	
 	def  __str__(self):
 		return self.name
