@@ -28,7 +28,7 @@ import ast
 logging.basicConfig(level=logging.INFO)
 logging.getLogger('suds.transport').setLevel(logging.DEBUG)
 
-def collect(request,start_date,end_date, client_id):
+def collect(request,start_date,end_date):
 
 	try:
 		fb_acc = SocialAccount.objects.get(user_id = request.user.id,provider='facebook')
@@ -37,6 +37,8 @@ def collect(request,start_date,end_date, client_id):
 		google_tok = SocialToken.objects.get(account=google_acc)
 	except:
 		return HttpResponse("error connecting Social Accounts")
+	
+	client_id = '718-383-3426'
 	
 	#clear the database
 	GoogleCampaign.objects.all().delete()
@@ -87,6 +89,11 @@ def collect(request,start_date,end_date, client_id):
 	and the xml file will be parsed to store it on django server
 '''
 def google_data(request, report_model, client_id, startDate, endDate):  
+	try:
+		google_client = GoogleClient.objects.get(client_id=client_id)
+	except ObjectDoesNotExist:
+		return HttpResponse('The Client ID does not exist')
+	
 	adwords_client = adwords.AdWordsClient.LoadFromStorage()
 	adwords_client.SetClientCustomerId(client_id)
 	report_downloader = adwords_client.GetReportDownloader(version='v201506')  
@@ -133,7 +140,7 @@ def google_data(request, report_model, client_id, startDate, endDate):
 				#if not then make a new campaign
 				campaign = GoogleCampaign()
 				campaign.campaign_name = campaignName
-				campaign.report = report_model
+				campaign.client = google_client
 				campaign.save()
 			
 			try:
@@ -247,6 +254,12 @@ def fb_data(request, report_model, fb_tok, fbstartDate, fbendDate):
 			campaign_model.save()	
  
 def all_google_data(request, report_model, client_id):
+	
+	try:
+		google_client = GoogleClient.objects.get(client_id=client_id)
+	except ObjectDoesNotExist:
+		return HttpResponse('The Client ID does not exist')
+	
 	adwords_client = adwords.AdWordsClient.LoadFromStorage()
 	adwords_client.SetClientCustomerId(client_id)
 	report_downloader = adwords_client.GetReportDownloader(version='v201506')  
@@ -291,7 +304,7 @@ def all_google_data(request, report_model, client_id):
 				#if not then make a new campaign
 				campaign = GoogleCampaign()
 				campaign.campaign_name = campaignName
-				campaign.report = report_model
+				campaign.client = google_client
 				campaign.save()
 			
 			try:
@@ -397,6 +410,11 @@ def all_fb_data(request, report_model, fb_tok):
 
 def month_google_data(request, report_model, client_id):
 
+	try:
+		google_client = GoogleClient.objects.get(client_id=client_id)
+	except ObjectDoesNotExist:
+		return HttpResponse('The Client ID does not exist')
+
 	adwords_client = adwords.AdWordsClient.LoadFromStorage()
 	adwords_client.SetClientCustomerId(client_id)
 	report_downloader = adwords_client.GetReportDownloader(version='v201506')  
@@ -441,7 +459,7 @@ def month_google_data(request, report_model, client_id):
 				#if not then make a new campaign
 				campaign = GoogleCampaign()
 				campaign.campaign_name = campaignName
-				campaign.report = report_model
+				campaign.client = google_client
 				campaign.save()
 			
 			try:
@@ -596,11 +614,3 @@ def campaigns(request):
 def result(request, campaign_id):
   campaign = get_object_or_404(GoogleCampaign, pk=campaign_id)
   return render(request, 'report/main.html',{'Campaign': campaign})
-
-def export(request):
-  campaign_list = FacebookCampaign.objects.all()
-  column_names = ['name','clicks','cost','impressions']
-  return excel.make_response_from_query_sets(campaign_list, column_names, 'xls')
-
-def getid(request,start_date,end_date):
-  return render(render,'report/id.html',{'start_date': start_date, 'end_date': end_date})
