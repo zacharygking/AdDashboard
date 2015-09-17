@@ -41,7 +41,7 @@ def collect(request,start_date,end_date, ccid):
     		fb_tok = SocialToken.objects.get(account=fb_acc)
     		#google_tok = SocialToken.objects.get(account=google_acc)
   	except:
-    	return HttpResponse("error connecting Social Accounts")
+    		return HttpResponse("error connecting Social Accounts")
 
   	#clear the database
   	GoogleCampaign.objects.all().delete()
