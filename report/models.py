@@ -3,12 +3,11 @@ from django.contrib.auth.models import User
 from datetime import datetime
 
 class Report(models.Model):
-    date_taken = models.DateTimeField(auto_now_add=True, blank=True)
-    user = models.CharField(max_length=200,default='')
-    date_range = models.CharField(max_length=200,default='')
-
-    def __str__(self):
-        return self.user	
+	date_taken = models.DateTimeField(auto_now_add=True, blank=True)
+	user = models.CharField(max_length=200,default='')
+	
+	def __str__(self):
+		return self.user
 		
 class GoogleClient(models.Model):
 	client_id = models.CharField(max_length=200, default='')
@@ -20,6 +19,7 @@ class GoogleClient(models.Model):
 	
 class GoogleCampaign(models.Model):
 	campaign_name = models.CharField(max_length=200, default='')
+	client = models.ForeignKey(GoogleClient, blank=True, null=True)
     
 	def __str__(self):
 		return self.campaign_name
