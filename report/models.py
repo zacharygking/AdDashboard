@@ -4,6 +4,7 @@ from datetime import datetime
 
 class Report(models.Model):
 	date_taken = models.DateTimeField(auto_now_add=True, blank=True)
+	date_range = models.CharField(max_length=200, default='')
 	user = models.CharField(max_length=200,default='')
 	
 	def __str__(self):
