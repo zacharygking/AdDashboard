@@ -681,12 +681,7 @@ def campaigns(request):
 def result(request, campaign_id):
   campaign = get_object_or_404(GoogleCampaign, pk=campaign_id)
   return render(request, 'report/main.html',{'Campaign': campaign})
-
-def export(request):
-  campaign_list = FacebookCampaign.objects.all()
-  column_names = ['name','clicks','cost','impressions']
-  return excel.make_response_from_query_sets(campaign_list, column_names, 'xls')
-
+  
 def getid(request,start_date,end_date):
   ccid_list = GoogleClient.objects.filter(user=request.user)
   return render(request,'report/id.html',{'start_date': start_date, 'end_date': end_date, 'ccid_list':ccid_list})
