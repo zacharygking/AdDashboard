@@ -105,6 +105,7 @@ def google_data(request, client_id, startDate, endDate):
 	except ObjectDoesNotExist:
 		return HttpResponse('The Client ID does not exist')
 	adwords_client = adwords.AdWordsClient.LoadFromStorage()
+	adwords_client.SetClientCustomerId(client_id)
 	report_downloader = adwords_client.GetReportDownloader(version='v201506')  
   
 	# Create report definition.
@@ -268,6 +269,7 @@ def all_google_data(request, client_id):
 	except ObjectDoesNotExist:
 		return HttpResponse('The Client ID does not exist')
 	adwords_client = adwords.AdWordsClient.LoadFromStorage()
+	adwords_client.SetClientCustomerId(client_id)
 	report_downloader = adwords_client.GetReportDownloader(version='v201506')  
   
 	# Create report definition.
@@ -422,6 +424,7 @@ def month_google_data(request, client_id):
 		return HttpResponse('The Client ID does not exist')
 
 	adwords_client = adwords.AdWordsClient.LoadFromStorage()
+	adwords_client.SetClientCustomerId(client_id)
 	report_downloader = adwords_client.GetReportDownloader(version='v201506')  
   
 	# Create report definition.
