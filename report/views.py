@@ -650,7 +650,7 @@ def select(request):
     authenticated = True
   else:
     authenticated = False
-  return render(request, 'report/select.html', {'authenticated':authenticated,'report':report})
+  return render(request, 'report/select.html', {'authenticated':authenticated,'report':report, 'g_src': g_src, 'fb_src':fb_src})
 
 def select_adgroup(request,gcampaign_id,fbacc_id):
   fbacc = FacebookAccount.objects.get(pk=fbacc_id)
