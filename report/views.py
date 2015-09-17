@@ -28,7 +28,7 @@ import ast
 logging.basicConfig(level=logging.INFO)
 logging.getLogger('suds.transport').setLevel(logging.DEBUG)
 
-def collect(request,start_date,end_date):
+def collect(request,start_date,end_date, client_id):
 
 	try:
 		fb_acc = SocialAccount.objects.get(user_id = request.user.id,provider='facebook')
@@ -37,8 +37,6 @@ def collect(request,start_date,end_date):
 		google_tok = SocialToken.objects.get(account=google_acc)
 	except:
 		return HttpResponse("error connecting Social Accounts")
-	
-	client_id = '718-383-3426'
 	
 	#clear the database
 	GoogleCampaign.objects.all().delete()
