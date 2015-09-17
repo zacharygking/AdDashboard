@@ -119,6 +119,9 @@ def total():
 	google_model.clicks = google_clicks
 	google_model.impressions = google_impressions
 	google_model.cost = round(google_cost,2)
+	google_model.CTR = round(google_model.clicks * 100/google_model.impressions,2)
+	google_model.CPC = round(google_model.cost/google_model.clicks,2)
+	google_model.CPM = round(google_model.cost * 1000 / google_model.impressions,2)
 	google_model.save()
 
 	for current_facebook in FacebookCampaign.objects.all():
@@ -131,6 +134,9 @@ def total():
 	facebook_model.clicks = facebook_clicks
 	facebook_model.impressions = facebook_impressions
 	facebook_model.cost = round(facebook_cost,2)
+	facebook_model.CTR = round(facebook_model.clicks * 100/facebook_model.impressions,2)
+	facebook_model.CPC = round(facebook_model.cost/facebook_model.clicks,2)
+	facebook_model.CPM = round(facebook_model.cost * 1000 / facebook_model.impressions,2)
 	facebook_model.save()
 	
 	total = Source()
@@ -138,6 +144,9 @@ def total():
 	total.clicks = google_model.clicks + facebook_model.clicks
 	total.impressions = google_model.impressions + facebook_model.impressions 
 	total.cost = google_model.cost + facebook_model.cost
+	total.CTR = round(total.clicks * 100/total.impressions,2)
+	total.CPC = round(total.cost/total.clicks,2)
+	total.CPM = round(total.cost * 1000/total.impressions,2)
 	total.save()
 	
 def download(request):
@@ -681,12 +690,7 @@ def campaigns(request):
 def result(request, campaign_id):
   campaign = get_object_or_404(GoogleCampaign, pk=campaign_id)
   return render(request, 'report/main.html',{'Campaign': campaign})
-
-def export(request):
-  campaign_list = FacebookCampaign.objects.all()
-  column_names = ['name','clicks','cost','impressions']
-  return excel.make_response_from_query_sets(campaign_list, column_names, 'xls')
-
+  
 def getid(request,start_date,end_date):
   ccid_list = GoogleClient.objects.filter(user=request.user)
   return render(request,'report/id.html',{'start_date': start_date, 'end_date': end_date, 'ccid_list':ccid_list})
