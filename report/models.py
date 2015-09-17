@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 from datetime import datetime
 
 class Report(models.Model):
@@ -8,10 +9,17 @@ class Report(models.Model):
 
     def __str__(self):
         return self.user	
+		
+class GoogleClient(models.Model):
+	client_id = models.CharField(max_length=200, default='')
+	client_name = models.CharField(max_length=200, default='')
+	user = models.ForeignKey(User, blank=True, null=True)
+	
+	def __str__(self):
+		return self.client_name	
 	
 class GoogleCampaign(models.Model):
 	campaign_name = models.CharField(max_length=200, default='')
-	report = models.ForeignKey(Report, blank=True, null=True)
     
 	def __str__(self):
 		return self.campaign_name

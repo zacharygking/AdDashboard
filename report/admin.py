@@ -1,7 +1,8 @@
 from django.contrib import admin
-from .models import Report, GoogleCampaign, GoogleAdGroup, GoogleKeyword, FacebookCampaign, FacebookAccount
+from .models import Report, GoogleClient, GoogleCampaign, GoogleAdGroup, GoogleKeyword, FacebookCampaign, FacebookAccount
 
 admin.site.register(Report)
+admin.site.register(GoogleClient)
 admin.site.register(GoogleCampaign)
 admin.site.register(GoogleAdGroup)
 admin.site.register(GoogleKeyword)

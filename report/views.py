@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from datetime import datetime
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
-from report.models import Report, GoogleCampaign, GoogleAdGroup, GoogleKeyword, FacebookCampaign, FacebookAccount
+from report.models import Report, GoogleClient GoogleCampaign, GoogleAdGroup, GoogleKeyword, FacebookCampaign, FacebookAccount
 
 #import for google
 import logging
