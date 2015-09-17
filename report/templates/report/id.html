@@ -2,12 +2,29 @@
 <head>
 </head>
 <body>
-
-<h1> {{ 'Welcome to the idmloco Ad Report Dashboard' }} </h1><br>
-    <h3> You are Logged in as {{ request.user.username }} </h3><br>
+<center>
+<h1> {{ 'Welcome to the idmloco Ad Report Dashboard' }} </h1>
+    <h3> You are Logged in as <font color="green">{{ request.user.username }} </font></h3>
     Selected Date Range: <br>
     Start Date: {{start_date}} <br>
     End Date: {{end_date}} <br><hr>
-
+    To continue, select the client to report for:
+    <form>
+    <table border=0>
+    <tr>
+    	<td align="left">
+    		{% for client in ccid_list %}
+    		<input type="radio" id="{{client.id}}" name="client" value="{{client.id}}" checked="checked"/>
+			<label for="{{client.id}}">{{client.client_name}}</label><br/>
+    		{% endfor %}
+    	</td>
+    </tr>
+    <tr>
+    	<td align="center">
+    		<input type="submit" onclick="window.location = window.location + client.value; return false;"/> 
+    	</td>
+    </tr>
+	</form>
+</center>
 </body>
 </html>

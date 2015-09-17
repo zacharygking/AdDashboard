@@ -626,4 +626,4 @@ def export(request):
 
 def getid(request,start_date,end_date):
   ccid_list = GoogleClient.objects.filter(user=request.user)
-  return render(request,'report/id.html',{'start_date': start_date, 'end_date': end_date})
+  return render(request,'report/id.html',{'start_date': start_date, 'end_date': end_date, 'ccid_list':ccid_list})
