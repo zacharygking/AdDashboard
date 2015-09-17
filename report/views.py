@@ -61,12 +61,14 @@ def collect(request,start_date,end_date,ccid):
     report_model.save()
     all_google_data(request, client_id)
     all_fb_data(request, report_model, fb_tok)
+    total()
     return redirect("../../../../view")
   elif(start_date == '2' and end_date == '2'):
     report_model.date_range = "Last 30 Days"
     report_model.save()
     month_google_data(request, client_id)
     month_fb_data(request, report_model, fb_tok)
+    total()
     return redirect("../../../../view")
 	
   i_y = start_date[0] + start_date[1] + start_date[2] + start_date[3]
