@@ -575,19 +575,13 @@ def index(request):
   return render(request, 'report/index.html', {'fb' : loginlist[0], 'google' : loginlist[1]})
 
 def select(request):
-  try:
-    report = Report.objects.get(user=request.user.username)
-    reportowned = True
-    if GoogleCampaign.objects.filter(report=report):
-      googleobjects = True
-    else:
-      googleobjects = False
-  except ObjectDoesNotExist:
-    report = Report.objects.get()
-    reportowned = False
-    googleobjects = False
+  report = Report.objects.get()
 
-  return render(request, 'report/select.html', {'report': report, 'googleobjects': googleobjects, 'reportowned': reportowned})
+  if request.user.username == report.user:
+    authenticated = True
+  else:
+    authenticated = False
+  return render(request, 'report/select.html', {'authenticated':authenticated,'report':report})
 
 def select_adgroup(request,gcampaign_id,fbacc_id):
   fbacc = FacebookAccount.objects.get(pk=fbacc_id)
