@@ -32,78 +32,73 @@ import pyexcel.ext.xls
 logging.basicConfig(level=logging.INFO)
 logging.getLogger('suds.transport').setLevel(logging.DEBUG)
 
-def collect(request,start_date,end_date, ccid):
-	client = GoogleClient.objects.get(pk=ccid)
-	client_id = client.client_id
-	try:
-    		fb_acc = SocialAccount.objects.get(user_id = request.user.id,provider='facebook')
-    		#google_acc = SocialAccount.objects.get(user_id = request.user.id,provider='google')
-    		fb_tok = SocialToken.objects.get(account=fb_acc)
-    		#google_tok = SocialToken.objects.get(account=google_acc)
-  	except:
-    	return HttpResponse("error connecting Social Accounts")
+def collect(request,start_date,end_date):
 
-  	#clear the database
-  	GoogleCampaign.objects.all().delete()
-  	GoogleAdGroup.objects.all().delete()
-  	GoogleKeyword.objects.all().delete()
-  	FacebookCampaign.objects.all().delete()
-  	FacebookAccount.objects.all().delete()
-  	Report.objects.all().delete()
+  try:
+    fb_acc = SocialAccount.objects.get(user_id = request.user.id,provider='facebook')
+    google_acc = SocialAccount.objects.get(user_id = request.user.id,provider='google')
+    fb_tok = SocialToken.objects.get(account=fb_acc)
+    google_tok = SocialToken.objects.get(account=google_acc)
+  except:
+    return HttpResponse("error connecting Social Accounts")
 
-  	report_model = Report()
-  	report_model.user = request.user.username
-  	report_model.date_taken = datetime.now()
+  #clear the database
+  GoogleCampaign.objects.all().delete()
+  GoogleAdGroup.objects.all().delete()
+  GoogleKeyword.objects.all().delete()
+  FacebookCampaign.objects.all().delete()
+  FacebookAccount.objects.all().delete()
+  Report.objects.all().delete()
+
+  report_model = Report()
+  report_model.user = request.user.username
+  report_model.date_taken = datetime.now()
 
 
-  	if(start_date == '1' and end_date == '1'):
-	    	report_model.date_range = "All Time"
-    		report_model.save()
-    		all_google_data(request, client_id)
-    		all_fb_data(request, report_model, fb_tok)
-    		return redirect("../../../view")
-  	elif(start_date == '2' and end_date == '2'):
-    		report_model.date_range = "Last 30 Days"
-    		report_model.save()
-    		month_google_data(request, client_id)
-    		month_fb_data(request, report_model, fb_tok)
-    		return redirect("../../../view")
+  if(start_date == '1' and end_date == '1'):
+    report_model.date_range = "All Time"
+    report_model.save()
+    all_google_data(request, report_model)
+    all_fb_data(request, report_model, fb_tok)
+    return redirect("../../../view")
+  elif(start_date == '2' and end_date == '2'):
+    report_model.date_range = "Last 30 Days"
+    report_model.save()
+    month_google_data(request, report_model)
+    month_fb_data(request, report_model, fb_tok)
+    return redirect("../../../view")
 	
-	i_y = start_date[0] + start_date[1] + start_date[2] + start_date[3]
-	i_m = start_date[5] + start_date[6]
-  	i_d = start_date[8] + start_date[9]
+  i_y = start_date[0] + start_date[1] + start_date[2] + start_date[3]
+  i_m = start_date[5] + start_date[6]
+  i_d = start_date[8] + start_date[9]
 
-  	f_y = end_date[0] + end_date[1] + end_date[2] + end_date[3]
-  	f_m = end_date[5] + end_date[6]
-  	f_d = end_date[8] + end_date[9]
+  f_y = end_date[0] + end_date[1] + end_date[2] + end_date[3]
+  f_m = end_date[5] + end_date[6]
+  f_d = end_date[8] + end_date[9]
 
 
-  	googstartDate = i_y+i_m+i_d
-  	googendDate = f_y+f_m+f_d
+  googstartDate = i_y+i_m+i_d
+  googendDate = f_y+f_m+f_d
 
-  	fbstartDate = i_y + '-' + i_m + '-' + i_d
-  	fbendDate = f_y + '-' + f_m + '-' + f_d
+  fbstartDate = i_y + '-' + i_m + '-' + i_d
+  fbendDate = f_y + '-' + f_m + '-' + f_d
 
-  	report_model.date_range = fbstartDate + " to " + fbendDate
-  	report_model.save()
+  report_model.date_range = fbstartDate + " to " + fbendDate
+  report_model.save()
 
-  	#get the google data
-  	google_data(request, client_id, googstartDate, googendDate)
+  #get the google data
+  google_data(request, report_model, googstartDate, googendDate)
 
-  	#get the facebook data
-  	fb_data(request, report_model, fb_tok, fbstartDate, fbendDate)
-  	return redirect("../../../view")
+  #get the facebook data
+  fb_data(request, report_model, fb_tok, fbstartDate, fbendDate)
+  return redirect("../../../view")
 
 '''
 	method will create a report downloader implemented by google 
 	and fetch the data which will then be stored in a xml file 
 	and the xml file will be parsed to store it on django server
 '''
-def google_data(request, client_id, startDate, endDate):  
-	try:
-		google_client = GoogleClient.objects.get(client_id=client_id)
-	except ObjectDoesNotExist:
-		return HttpResponse('The Client ID does not exist')
+def google_data(request, report_model, startDate, endDate):  
 	adwords_client = adwords.AdWordsClient.LoadFromStorage()
 	report_downloader = adwords_client.GetReportDownloader(version='v201506')  
   
@@ -149,7 +144,7 @@ def google_data(request, client_id, startDate, endDate):
 				#if not then make a new campaign
 				campaign = GoogleCampaign()
 				campaign.campaign_name = campaignName
-				campaign.client = google_client
+				campaign.report = report_model
 				campaign.save()
 			
 			try:
@@ -262,12 +257,7 @@ def fb_data(request, report_model, fb_tok, fbstartDate, fbendDate):
 			campaign_model.account = account_model
 			campaign_model.save()	
  
-def all_google_data(request, client_id):
-	try:
-		google_client = GoogleClient.objects.get(client_id=client_id)
-	except ObjectDoesNotExist:
-		return HttpResponse('The Client ID does not exist')
-	
+def all_google_data(request, report_model):
 	adwords_client = adwords.AdWordsClient.LoadFromStorage()
 	report_downloader = adwords_client.GetReportDownloader(version='v201506')  
   
@@ -311,7 +301,7 @@ def all_google_data(request, client_id):
 				#if not then make a new campaign
 				campaign = GoogleCampaign()
 				campaign.campaign_name = campaignName
-				campaign.client = google_client
+				campaign.report = report_model
 				campaign.save()
 			
 			try:
@@ -415,11 +405,7 @@ def all_fb_data(request, report_model, fb_tok):
 			campaign_model.account = account_model
 			campaign_model.save()	
 
-def month_google_data(request, client_id):
-	try:
-		google_client = GoogleClient.objects.get(client_id=client_id)
-	except ObjectDoesNotExist:
-		return HttpResponse('The Client ID does not exist')
+def month_google_data(request, report_model):
 
 	adwords_client = adwords.AdWordsClient.LoadFromStorage()
 	report_downloader = adwords_client.GetReportDownloader(version='v201506')  
@@ -464,7 +450,7 @@ def month_google_data(request, client_id):
 				#if not then make a new campaign
 				campaign = GoogleCampaign()
 				campaign.campaign_name = campaignName
-				campaign.client = google_client
+				campaign.report = report_model
 				campaign.save()
 			
 			try:
