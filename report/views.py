@@ -88,7 +88,7 @@ def collect(request,start_date,end_date, client_id):
 '''
 def google_data(request, report_model, client_id, startDate, endDate):  
 	adwords_client = adwords.AdWordsClient.LoadFromStorage()
-	adword_client.SetClientCustomerId(client_id)
+	adwords_client.SetClientCustomerId(client_id)
 	report_downloader = adwords_client.GetReportDownloader(version='v201506')  
   
 	# Create report definition.
