@@ -624,3 +624,6 @@ def export(request):
   column_names = ['name','clicks','cost','impressions']
   return excel.make_response_from_query_sets(campaign_list, column_names, 'xls')
 
+def getid(request,start_date,end_date):
+  return render(render,'report/id.html',{'start_date': start_date, 'end_date': end_date})
+
