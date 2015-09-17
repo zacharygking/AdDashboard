@@ -32,14 +32,14 @@ import pyexcel.ext.xls
 logging.basicConfig(level=logging.INFO)
 logging.getLogger('suds.transport').setLevel(logging.DEBUG)
 
-<<<<<<< HEAD
-def collect(request,start_date,end_date):
-
+def collect(request,start_date,end_date,ccid):
+  client = GoogleClient.objects.get(pk=ccid)
+  client_id = client.client_id
   try:
     fb_acc = SocialAccount.objects.get(user_id = request.user.id,provider='facebook')
-    google_acc = SocialAccount.objects.get(user_id = request.user.id,provider='google')
+    #google_acc = SocialAccount.objects.get(user_id = request.user.id,provider='google')
     fb_tok = SocialToken.objects.get(account=fb_acc)
-    google_tok = SocialToken.objects.get(account=google_acc)
+    #google_tok = SocialToken.objects.get(account=google_acc)
   except:
     return HttpResponse("error connecting Social Accounts")
 
@@ -59,13 +59,13 @@ def collect(request,start_date,end_date):
   if(start_date == '1' and end_date == '1'):
     report_model.date_range = "All Time"
     report_model.save()
-    all_google_data(request, report_model)
+    all_google_data(request, client_id)
     all_fb_data(request, report_model, fb_tok)
     return redirect("../../../view")
   elif(start_date == '2' and end_date == '2'):
     report_model.date_range = "Last 30 Days"
     report_model.save()
-    month_google_data(request, report_model)
+    month_google_data(request, client_id)
     month_fb_data(request, report_model, fb_tok)
     return redirect("../../../view")
 	
@@ -88,7 +88,7 @@ def collect(request,start_date,end_date):
   report_model.save()
 
   #get the google data
-  google_data(request, report_model, googstartDate, googendDate)
+  google_data(request, client_id, googstartDate, googendDate)
 
   #get the facebook data
   fb_data(request, report_model, fb_tok, fbstartDate, fbendDate)
@@ -99,7 +99,11 @@ def collect(request,start_date,end_date):
 	and fetch the data which will then be stored in a xml file 
 	and the xml file will be parsed to store it on django server
 '''
-def google_data(request, report_model, startDate, endDate):  
+def google_data(request, client_id, startDate, endDate):
+	try:
+		google_client = GoogleClient.objects.get(client_id=client_id)
+	except ObjectDoesNotExist:
+		return HttpResponse('The Client ID does not exist')
 	adwords_client = adwords.AdWordsClient.LoadFromStorage()
 	report_downloader = adwords_client.GetReportDownloader(version='v201506')  
   
@@ -145,7 +149,7 @@ def google_data(request, report_model, startDate, endDate):
 				#if not then make a new campaign
 				campaign = GoogleCampaign()
 				campaign.campaign_name = campaignName
-				campaign.report = report_model
+				campaign.client = google_client
 				campaign.save()
 			
 			try:
@@ -258,7 +262,11 @@ def fb_data(request, report_model, fb_tok, fbstartDate, fbendDate):
 			campaign_model.account = account_model
 			campaign_model.save()	
  
-def all_google_data(request, report_model):
+def all_google_data(request, client_id):
+	try:
+		google_client = GoogleClient.objects.get(client_id=client_id)
+	except ObjectDoesNotExist:
+		return HttpResponse('The Client ID does not exist')
 	adwords_client = adwords.AdWordsClient.LoadFromStorage()
 	report_downloader = adwords_client.GetReportDownloader(version='v201506')  
   
@@ -302,7 +310,7 @@ def all_google_data(request, report_model):
 				#if not then make a new campaign
 				campaign = GoogleCampaign()
 				campaign.campaign_name = campaignName
-				campaign.report = report_model
+				campaign.client = google_client
 				campaign.save()
 			
 			try:
@@ -406,7 +414,12 @@ def all_fb_data(request, report_model, fb_tok):
 			campaign_model.account = account_model
 			campaign_model.save()	
 
-def month_google_data(request, report_model):
+def month_google_data(request, client_id):
+	
+	try:
+		google_client = GoogleClient.objects.get(client_id=client_id)
+	except ObjectDoesNotExist:
+		return HttpResponse('The Client ID does not exist')
 
 	adwords_client = adwords.AdWordsClient.LoadFromStorage()
 	report_downloader = adwords_client.GetReportDownloader(version='v201506')  
@@ -451,7 +464,7 @@ def month_google_data(request, report_model):
 				#if not then make a new campaign
 				campaign = GoogleCampaign()
 				campaign.campaign_name = campaignName
-				campaign.report = report_model
+				campaign.client = google_client
 				campaign.save()
 			
 			try:
