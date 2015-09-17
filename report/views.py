@@ -32,6 +32,7 @@ import pyexcel.ext.xls
 logging.basicConfig(level=logging.INFO)
 logging.getLogger('suds.transport').setLevel(logging.DEBUG)
 
+<<<<<<< HEAD
 def collect(request,start_date,end_date):
 
   try:
