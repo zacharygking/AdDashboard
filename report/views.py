@@ -644,7 +644,8 @@ def index(request):
 
 def select(request):
   report = Report.objects.get()
-
+  fb_src = Source.objects.get(name='Facebook')
+  g_src = Source.objects.get(name='Google')
   if request.user.username == report.user:
     authenticated = True
   else:
