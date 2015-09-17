@@ -25,61 +25,73 @@ from allauth.socialaccount.models import SocialToken, SocialAccount
 import json
 import ast
 
+#import for excel
+import django_excel as excel
+import pyexcel.ext.xls
+
 logging.basicConfig(level=logging.INFO)
 logging.getLogger('suds.transport').setLevel(logging.DEBUG)
 
 def collect(request,start_date,end_date):
 
-	try:
-		fb_acc = SocialAccount.objects.get(user_id = request.user.id,provider='facebook')
-		google_acc = SocialAccount.objects.get(user_id = request.user.id,provider='google')
-		fb_tok = SocialToken.objects.get(account=fb_acc)
-		google_tok = SocialToken.objects.get(account=google_acc)
-	except:
-		return HttpResponse("error connecting Social Accounts")
-		
-	#clear the database
-	GoogleCampaign.objects.all().delete()
-	GoogleAdGroup.objects.all().delete()
-	GoogleKeyword.objects.all().delete()
-	FacebookCampaign.objects.all().delete()
-	FacebookAccount.objects.all().delete()
-	Report.objects.all().delete()
-		
-	report_model = Report()
-	report_model.user = request.user.username
-	report_model.date_taken = datetime.now()
-	report_model.save()
-	
-	if(start_date == '1' and end_date == '1'):
-		all_google_data(request, report_model)
-		all_fb_data(request, report_model, fb_tok)
-		return redirect("../../../view")
-	elif(start_date == '2' and end_date == '2'):
-		month_google_data(request, report_model)
-		month_fb_data(request, report_model, fb_tok)
-		return redirect("../../../view")
-	
-	i_y = start_date[0] + start_date[1] + start_date[2] + start_date[3]
-	i_m = start_date[5] + start_date[6]
-	i_d = start_date[8] + start_date[9]
+  try:
+    fb_acc = SocialAccount.objects.get(user_id = request.user.id,provider='facebook')
+    google_acc = SocialAccount.objects.get(user_id = request.user.id,provider='google')
+    fb_tok = SocialToken.objects.get(account=fb_acc)
+    google_tok = SocialToken.objects.get(account=google_acc)
+  except:
+    return HttpResponse("error connecting Social Accounts")
 
-	f_y = end_date[0] + end_date[1] + end_date[2] + end_date[3]
-	f_m = end_date[5] + end_date[6]
-	f_d = end_date[8] + end_date[9]
+  #clear the database
+  GoogleCampaign.objects.all().delete()
+  GoogleAdGroup.objects.all().delete()
+  GoogleKeyword.objects.all().delete()
+  FacebookCampaign.objects.all().delete()
+  FacebookAccount.objects.all().delete()
+  Report.objects.all().delete()
+
+  report_model = Report()
+  report_model.user = request.user.username
+  report_model.date_taken = datetime.now()
+
+
+  if(start_date == '1' and end_date == '1'):
+    report_model.date_range = "All Time"
+    report_model.save()
+    all_google_data(request, report_model)
+    all_fb_data(request, report_model, fb_tok)
+    return redirect("../../../view")
+  elif(start_date == '2' and end_date == '2'):
+    report_model.date_range = "Last 30 Days"
+    report_model.save()
+    month_google_data(request, report_model)
+    month_fb_data(request, report_model, fb_tok)
+    return redirect("../../../view")
 	
-	googstartDate = i_y+i_m+i_d
-	googendDate = f_y+f_m+f_d
-	
-	fbstartDate = i_y + '-' + i_m + '-' + i_d
-	fbendDate = f_y + '-' + f_m + '-' + f_d
-	
-	#get the google data
-	google_data(request, report_model, googstartDate, googendDate)
-	
-	#get the facebook data
-	fb_data(request, report_model, fb_tok, fbstartDate, fbendDate)
-	return redirect("../../../view")
+  i_y = start_date[0] + start_date[1] + start_date[2] + start_date[3]
+  i_m = start_date[5] + start_date[6]
+  i_d = start_date[8] + start_date[9]
+
+  f_y = end_date[0] + end_date[1] + end_date[2] + end_date[3]
+  f_m = end_date[5] + end_date[6]
+  f_d = end_date[8] + end_date[9]
+
+
+  googstartDate = i_y+i_m+i_d
+  googendDate = f_y+f_m+f_d
+
+  fbstartDate = i_y + '-' + i_m + '-' + i_d
+  fbendDate = f_y + '-' + f_m + '-' + f_d
+
+  report_model.date_range = fbstartDate + " to " + fbendDate
+  report_model.save()
+
+  #get the google data
+  google_data(request, report_model, googstartDate, googendDate)
+
+  #get the facebook data
+  fb_data(request, report_model, fb_tok, fbstartDate, fbendDate)
+  return redirect("../../../view")
 
 '''
 	method will create a report downloader implemented by google 
@@ -581,12 +593,14 @@ def select_adgroup(request,gcampaign_id,fbacc_id):
   fbacc = FacebookAccount.objects.get(pk=fbacc_id)
   gcampaign = GoogleCampaign.objects.get(pk=gcampaign_id)
   adgroups =  gcampaign.googleadgroup_set.all()
-  return render(request,  'report/adgroups.html', {'fbacc': fbacc, 'gcampaign': gcampaign, 'adgroups' : adgroups})
+  report = Report.objects.get()
+  return render(request,  'report/adgroups.html', {'fbacc': fbacc, 'gcampaign': gcampaign, 'adgroups' : adgroups, 'report': report})
 
 def show_results(request, gcampaign_id, fbacc_id, gadgroup_id):
   adgroup = GoogleAdGroup.objects.get(id=gadgroup_id)
   account = FacebookAccount.objects.get(id=fbacc_id)
-  return render(request, 'report/results.html', {'adgroup': adgroup, 'account': account})
+  report = Report.objects.get()
+  return render(request, 'report/results.html', {'adgroup': adgroup, 'account': account, 'report': report})
 
 def adgroup(request, adgroup_id):
   adgroup = get_object_or_404(GoogleAdGroup,pk=adgroup_id)
@@ -604,3 +618,9 @@ def campaigns(request):
 def result(request, campaign_id):
   campaign = get_object_or_404(GoogleCampaign, pk=campaign_id)
   return render(request, 'report/main.html',{'Campaign': campaign})
+
+def export(request):
+  campaign_list = FacebookCampaign.objects.all()
+  column_names = ['name','clicks','cost','impressions']
+  return excel.make_response_from_query_sets(campaign_list, column_names, 'xls')
+

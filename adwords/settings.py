@@ -44,9 +44,6 @@ INSTALLED_APPS = (
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
-    'allauth.socialaccount.providers.google',
-    
-
 )
 
 MIDDLEWARE_CLASSES = (
@@ -126,7 +123,7 @@ SOCIALACCOUNT_PROVIDERS = \
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Los_Angeles'
 
 USE_I18N = True
 

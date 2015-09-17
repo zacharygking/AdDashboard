@@ -45,10 +45,6 @@ history.pushState('', document.title, window.location.pathname);
     <h3> You are Logged in as {{ request.user.username }} <br> <a href ="/accounts/logout"> Click Here to Logout </a></h3>
     {% if fb %}
       <font color="green"> Your account is linked with a Facebook account <br></font>
-      {% if google %}
-      <font color="green"> Your account is linked with a Google account <br><br></font>
-      Choose a date range to generate a report from
-        <form>
           <p>Start Date: <input type="date" id="start_date" name="start_date" /></p>
           <p>End Date:<input type="date" id="end_date" name="end_date"/></p>
           <input type="submit" onclick="window.location = window.location + 'report/generate/' + start_date.value + '/' + end_date.value; return false;"/>
@@ -56,19 +52,11 @@ history.pushState('', document.title, window.location.pathname);
         <br> or
         <br> <a href = "/report/generate/1/1/"> Generate a report for all time </a>
         <br> <a href = "/report/generate/2/2/"> Generate a report for the last 30 days </a>
-      {% else %}
-      <font color="red"> Your Account is not linked with a Google account <br></font>
-      click <a href="/accounts/social/connections/"> here </a> to link an account <br>
-      {% endif %}
+        <hr>
+        <a href="/report/view"> Click here to check the database for a past report </a>
     {% else %}
       <font color="red"> Your Account is not linked with a Facebook account <br></font>
-      {% if google %}
-      <font color="green"> Your Account is linked with a Google account <br></font>
       click <a href="/accounts/social/connections/"> here </a> to link an account <br>
-      {% else %}
-      <font color="red"> Your Account is not linked with a Google account <br></font>
-      click <a href="/accounts/social/connections/"> here </a> to link an account <br>
-      {% endif %}
     {% endif %}
   {% else %}
     <h3><font color="red"> You are not logged in </font>
@@ -76,10 +64,8 @@ history.pushState('', document.title, window.location.pathname);
     <a href ="/accounts/login"> Click Here to Login </a>
       <br>
       <br> 
-    In order to use the Dashboards reporting tools, an <br>account linked to Facebook and Google is necessary
+    In order to use the Dashboards reporting tools, an <br>account linked to Facebook is necessary
     </h3>
-
-
   {% endif %}
 <!--
 <h2> {{ 'GoogleAds'}} </h2>

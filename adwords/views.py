@@ -23,5 +23,4 @@ def index(request):
       loginlist = [False,False]
 
 
-
   return render(request, 'base/index.html', {'fb' : loginlist[0], 'google' : loginlist[1]})
