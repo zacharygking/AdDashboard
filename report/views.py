@@ -61,13 +61,13 @@ def collect(request,start_date,end_date,ccid):
     report_model.save()
     all_google_data(request, client_id)
     all_fb_data(request, report_model, fb_tok)
-    return redirect("../../../view")
+    return redirect("../../../../view")
   elif(start_date == '2' and end_date == '2'):
     report_model.date_range = "Last 30 Days"
     report_model.save()
     month_google_data(request, client_id)
     month_fb_data(request, report_model, fb_tok)
-    return redirect("../../../view")
+    return redirect("../../../../view")
 	
   i_y = start_date[0] + start_date[1] + start_date[2] + start_date[3]
   i_m = start_date[5] + start_date[6]
@@ -92,7 +92,7 @@ def collect(request,start_date,end_date,ccid):
 
   #get the facebook data
   fb_data(request, report_model, fb_tok, fbstartDate, fbendDate)
-  return redirect("../../../view")
+  return redirect("../../../../view")
 
 '''
 	method will create a report downloader implemented by google 
