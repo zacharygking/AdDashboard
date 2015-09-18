@@ -35,6 +35,7 @@ logging.getLogger('suds.transport').setLevel(logging.DEBUG)
 def collect(request,start_date,end_date,ccid):
   client = GoogleClient.objects.get(pk=ccid)
   client_id = client.client_id
+  client_name = client.client_name
   try:
     fb_acc = SocialAccount.objects.get(user_id = request.user.id,provider='facebook')
     #google_acc = SocialAccount.objects.get(user_id = request.user.id,provider='google')
@@ -54,6 +55,7 @@ def collect(request,start_date,end_date,ccid):
   report_model = Report()
   report_model.user = request.user.username
   report_model.date_taken = datetime.now()
+  report_model.google_account = client_name
 
 
   if(start_date == '1' and end_date == '1'):
@@ -104,14 +106,14 @@ def collect(request,start_date,end_date,ccid):
 def organize():
 	adSource.objects.all().delete()
 	
-	for goog_group in GoogleAdGroup.objects.all():
-		goog_name = goog_group.ad_group_name
+	for goog_cam in GoogleCampaign.objects.all():
+		goog_name = goog_cam.campaign_name
 		category = adSource()
 		category.provider = 'Google'
 		category.name = goog_name
 		
 		for goog_key in GoogleKeyword.objects.all():
-			if goog_key.adgroup.ad_group_name == goog_name:
+			if goog_key.adgroup.campaign.campaign_name == goog_name:
 				category.impressions = category.impressions + goog_key.impressions
 				category.cost = category.cost + goog_key.cost
 				category.clicks = category.clicks + goog_key.clicks
@@ -149,11 +151,11 @@ def total():
 	google_clicks = 0
 	google_impressions = 0
 	google_cost = 0
-	
+	'''
 	facebook_clicks = 0
 	facebook_impressions = 0
 	facebook_cost = 0
-	
+	'''
 	for current_google in GoogleKeyword.objects.all():
 		google_clicks = google_clicks + current_google.clicks
 		google_impressions = google_impressions + current_google.impressions
@@ -168,7 +170,7 @@ def total():
 	google_model.CPC = round(google_model.cost/google_model.clicks,2)
 	google_model.CPM = round(google_model.cost * 1000 / google_model.impressions,2)
 	google_model.save()
-
+'''
 	for current_facebook in FacebookCampaign.objects.all():
 		facebook_clicks = facebook_clicks + current_facebook.clicks
 		facebook_impressions = facebook_impressions + current_facebook.impressions
@@ -193,9 +195,10 @@ def total():
 	total.CPC = round(total.cost/total.clicks,2)
 	total.CPM = round(total.cost * 1000/total.impressions,2)
 	total.save()
+'''
 	
 def download(request, account_id):
-    query_sets = Source.objects.filter()
+    query_sets = [Source.objects.filter(name='Google'),adSource.objects.filter(account_id=account_id)]
     column_names = ['name', 'clicks', 'impressions', 'CTR', 'CPC', 'CPM', 'cost']
     return excel.make_response_from_query_sets(query_sets, column_names, 'xls')
 
