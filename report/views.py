@@ -117,6 +117,8 @@ def organize():
 				category.impressions = category.impressions + goog_key.impressions
 				category.cost = category.cost + goog_key.cost
 				category.clicks = category.clicks + goog_key.clicks
+				
+		category.cost = round(category.cost,2)
 		
 		if not category.impressions == 0:
 			category.CTR = round(category.clicks * 100/category.impressions,2)
@@ -137,6 +139,8 @@ def organize():
 				category.impressions = category.impressions + fb_cam.impressions
 				category.cost = category.cost + fb_cam.cost
 				category.clicks = category.clicks + fb_cam.clicks
+				
+		category.cost = round(category.cost,2)
 		
 		if not category.impressions == 0:
 			category.CTR = round(category.clicks * 100/category.impressions,2)
@@ -197,6 +201,7 @@ def addUp(google, facebook_adSource):
 	total.clicks = google.clicks + facebook.clicks
 	total.impressions = google.impressions + facebook.impressions 
 	total.cost = google.cost + facebook.cost
+	total.cost = round(total.cost,2)
 	if not total.impressions == 0:	
 		total.CTR = round(total.clicks * 100/total.impressions,2)
 		total.CPM = round(total.cost * 1000/total.impressions,2)
