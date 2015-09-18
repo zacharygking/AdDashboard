@@ -165,6 +165,7 @@ def total():
 	google_model.name = 'Google'
 	google_model.clicks = google_clicks
 	google_model.impressions = google_impressions
+	google_model.cost = round(google_cost,2)
 	if not google_model.impressions == 0:
 		google_model.CTR = round(google_model.clicks * 100/google_model.impressions,2)
 		google_model.CPM = round(google_model.cost * 1000 / google_model.impressions,2)
