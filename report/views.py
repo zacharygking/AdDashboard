@@ -165,10 +165,11 @@ def total():
 	google_model.name = 'Google'
 	google_model.clicks = google_clicks
 	google_model.impressions = google_impressions
-	google_model.cost = round(google_cost,2)
-	google_model.CTR = round(google_model.clicks * 100/google_model.impressions,2)
-	google_model.CPC = round(google_model.cost/google_model.clicks,2)
-	google_model.CPM = round(google_model.cost * 1000 / google_model.impressions,2)
+	if not google_model.impressions == 0:
+		google_model.CTR = round(google_model.clicks * 100/google_model.impressions,2)
+		google_model.CPM = round(google_model.cost * 1000 / google_model.impressions,2)
+	if not google_model.clicks == 0:
+		google_model.CPC = round(google_model.cost/google_model.clicks,2)
 	google_model.save()
 '''
 	for current_facebook in FacebookCampaign.objects.all():
@@ -225,9 +226,11 @@ def addUp(google, facebook_adSource):
 	total.clicks = google.clicks + facebook.clicks
 	total.impressions = google.impressions + facebook.impressions 
 	total.cost = google.cost + facebook.cost
-	total.CTR = round(total.clicks * 100/total.impressions,2)
-	total.CPC = round(total.cost/total.clicks,2)
-	total.CPM = round(total.cost * 1000/total.impressions,2)
+	if not total.impressions == 0:	
+		total.CTR = round(total.clicks * 100/total.impressions,2)
+		total.CPM = round(total.cost * 1000/total.impressions,2)
+	if not total.clicks == 0:		
+		total.CPC = round(total.cost/total.clicks,2)
 	total.save()
 
 '''
@@ -376,7 +379,6 @@ def fb_data(request, report_model, fb_tok, fbstartDate, fbendDate):
 			fields = {    			
     			'impressions',
     			'clicks',
-    			'cpc',
 			'spend'
     		}
 			data = str(current_campaign.get_insights(fields=fields,params=params))
@@ -393,9 +395,13 @@ def fb_data(request, report_model, fb_tok, fbstartDate, fbendDate):
 			campaign_model.campaign_id = str(current_campaign[AdCampaign.Field.id])
 			campaign_model.status = str(current_campaign[AdCampaign.Field.status])
 			campaign_model.clicks = int(parsed_data[0]['clicks'])
-			campaign_model.cpc = float(parsed_data[0]['cpc'])
 			campaign_model.impressions = int(parsed_data[0]['impressions'])
 			campaign_model.cost = float(parsed_data[0]['spend'])
+			if not campaign_model.impressions == 0:
+				campaign_model.CTR = round(campaign_model.clicks * 100/campaign_model.impressions,2)
+				campaign_model.CPM = round(campaign_model.cost * 1000 / campaign_model.impressions,2)
+			if not campaign_model.clicks == 0:
+				campaign_model.CPC = round(campaign_model.cost/campaign_model.clicks,2)
 			campaign_model.account = account_model
 			campaign_model.save()	
  
@@ -528,7 +534,6 @@ def all_fb_data(request, report_model, fb_tok):
 			fields = {    			
     			'impressions',
     			'clicks',
-    			'cpc',
 			'spend'
     		}
         
@@ -546,9 +551,13 @@ def all_fb_data(request, report_model, fb_tok):
 			campaign_model.campaign_id = str(current_campaign[AdCampaign.Field.id])
 			campaign_model.status = str(current_campaign[AdCampaign.Field.status])
 			campaign_model.clicks = int(parsed_data[0]['clicks'])
-			campaign_model.cpc = float(parsed_data[0]['cpc'])
 			campaign_model.impressions = int(parsed_data[0]['impressions'])
 			campaign_model.cost = float(parsed_data[0]['spend'])
+			if not campaign_model.impressions == 0:
+				campaign_model.CTR = round(campaign_model.clicks * 100/campaign_model.impressions,2)
+				campaign_model.CPM = round(campaign_model.cost * 1000 / campaign_model.impressions,2)
+			if not campaign_model.clicks == 0:
+				campaign_model.CPC = round(campaign_model.cost/campaign_model.clicks,2)
 			campaign_model.account = account_model
 			campaign_model.save()	
 
@@ -686,7 +695,6 @@ def month_fb_data(request, report_model, fb_tok):
 			fields = {    			
     			'impressions',
     			'clicks',
-    			'cpc',
 			'spend'
     		}
 			
@@ -704,9 +712,13 @@ def month_fb_data(request, report_model, fb_tok):
 			campaign_model.campaign_id = str(current_campaign[AdCampaign.Field.id])
 			campaign_model.status = str(current_campaign[AdCampaign.Field.status])
 			campaign_model.clicks = int(parsed_data[0]['clicks'])
-			campaign_model.cpc = float(parsed_data[0]['cpc'])
 			campaign_model.impressions = int(parsed_data[0]['impressions'])
 			campaign_model.cost = float(parsed_data[0]['spend'])
+			if not campaign_model.impressions == 0:
+				campaign_model.CTR = round(campaign_model.clicks * 100/campaign_model.impressions,2)
+				campaign_model.CPM = round(campaign_model.cost * 1000 / campaign_model.impressions,2)
+			if not campaign_model.clicks == 0:
+				campaign_model.CPC = round(campaign_model.cost/campaign_model.clicks,2)
 			campaign_model.account = account_model
 			campaign_model.save()	
 			
