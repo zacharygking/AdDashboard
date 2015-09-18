@@ -741,8 +741,13 @@ def index(request):
   return render(request, 'report/index.html', {'fb' : loginlist[0], 'google' : loginlist[1]})
 
 def select(request):
-	account_list = FacebookAccount.objects.all()
-	return render(request, 'report/select.html', {'account_list':account_list})
+	account_list = FacebookAccount.objects.all().order_by('account_name')
+	report = Report.objects.get()
+	if report.user == request.user.username:
+		authenticated=True
+	else:
+		authenticated=False
+	return render(request, 'report/select.html', {'account_list':account_list, 'authenticated':authenticated})
 
 
 def grandview(request, account_id):
@@ -751,8 +756,8 @@ def grandview(request, account_id):
   g_src = Source.objects.get(name='Google')
   fb_account = FacebookAccount.objects.get(pk=account_id)
   fb_adsource = adSource.objects.get(provider='Facebook', name=fb_account.account_name)
-  campaign_list = FacebookCampaign.objects.filter(account=fb_account)
-  g_adsource = adSource.objects.filter(provider='Google')
+  campaign_list = FacebookCampaign.objects.filter(account=fb_account).order_by('name')
+  g_adsource = adSource.objects.filter(provider='Google').order_by('name')
   if request.user.username == report.user:
     authenticated = True
   else:
@@ -784,11 +789,14 @@ def campaigns(request):
   except ObjectDoesNotExist:
     return HttpResponse("No Campaigns Exist")
 
+def privacypolicy(request):
+	return render(request, 'report/privacypolicy.html')
+
 
 def result(request, campaign_id):
   campaign = get_object_or_404(GoogleCampaign, pk=campaign_id)
   return render(request, 'report/main.html',{'Campaign': campaign})
   
 def getid(request,start_date,end_date):
-  ccid_list = GoogleClient.objects.filter(user=request.user)
+  ccid_list = GoogleClient.objects.filter(user=request.user).order_by('client_name')
   return render(request,'report/id.html',{'start_date': start_date, 'end_date': end_date, 'ccid_list':ccid_list})

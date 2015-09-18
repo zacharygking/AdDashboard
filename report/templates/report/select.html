@@ -5,7 +5,9 @@
 <body>
 <center>
 <h1> {{ 'Welcome to the idmloco Ad Report Dashboard' }} </h1>
+
     <h3> You are Logged in as <font color="green">{{ request.user.username }} </font></h3>
+    {% if authenticated %}
     To continue, select the Facebook client to report for:
     <form>
     <table border=0>
@@ -22,7 +24,13 @@
     		<input type="submit" onclick="window.location = window.location + account.value; return false;"/> 
     	</td>
     </tr>
+	</table>
 	</form>
+	{% else %}
+	There are no reports for this user stored in the database. <br> Return to the home page to generate a new report.
+	{% endif %}
+	<hr>  
+	<a href="../../"> Home Page </a> | <a href="../privacypolicy"> View Privacy Policy </a>
 </center>
 </body>
 </html>
