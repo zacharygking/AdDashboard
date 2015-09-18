@@ -118,7 +118,7 @@ def organize():
 				category.cost = round(category.cost + goog_key.cost,2)
 				category.clicks = category.clicks + goog_key.clicks
 				
-		#category.cost = round(category.cost,2)
+		category.cost = round(category.cost,2)
 		
 		if not category.impressions == 0:
 			category.CTR = round(category.clicks * 100/category.impressions,2)
