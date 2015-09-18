@@ -202,9 +202,9 @@ def download(request, account_id):
 	facebook_adSource = adSource.objects.filter(name=facebook.account_name)
 	google = Source.objects.filter(name='Google')
 	addUp(google, facebook_adSource)
-    	query_sets = Source.objects.filter()
-    	column_names = ['name', 'clicks', 'impressions', 'CTR', 'CPC', 'CPM', 'cost']
-    	return excel.make_response_from_query_sets(query_sets, column_names, 'xls')
+	query_sets = Source.objects.filter()
+	column_names = ['name', 'clicks', 'impressions', 'CTR', 'CPC', 'CPM', 'cost']
+	return excel.make_response_from_query_sets(query_sets, column_names, 'xls')
 
 def addUp(google, facebook_adSource):
 	Source.objects.filter(name='Facebook').delete()
