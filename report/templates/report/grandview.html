@@ -92,12 +92,12 @@
 			<td>CPM</td>
 		</tr>
 		<tr>
-			<td>{{fb_src.clicks}}</td>
-			<td>${{fb_src.cost}}</td>
-			<td>{{fb_src.impressions}}</td>
-			<td>{{fb_src.CTR}}%</td>
-			<td>${{fb_src.CPC}}</td>
-			<td>${{fb_src.CPM}}</td>
+			<td>{{fb_adsource.clicks}}</td>
+			<td>${{fb_adsource.cost}}</td>
+			<td>{{fb_adsource.impressions}}</td>
+			<td>{{fb_adsource.CTR}}%</td>
+			<td>${{fb_adsource.CPC}}</td>
+			<td>${{fb_adsource.CPM}}</td>
 		</tr>
 		</table>
 	</td>
@@ -117,6 +117,7 @@
 		Google Goes Here
 	</td>
 	<td align="center">
+			<h4>Individual Campaign Performance</h4>
 			{% for campaign in campaign_list %}
 			{{campaign.name}}
 			<table border=1>

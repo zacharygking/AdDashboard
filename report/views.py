@@ -706,7 +706,7 @@ def grandview(request, account_id):
   fb_src = Source.objects.get(name='Facebook')
   g_src = Source.objects.get(name='Google')
   fb_account = FacebookAccount.objects.get(pk=account_id)
-  fb_adsource = adSource.objects.get(provider='facebook', name=fb_account.account_name)
+  fb_adsource = adSource.objects.get(provider='Facebook', name=fb_account.account_name)
   campaign_list = FacebookCampaign.objects.filter(account=fb_account)
   if request.user.username == report.user:
     authenticated = True
