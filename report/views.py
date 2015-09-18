@@ -97,8 +97,8 @@ def collect(request,start_date,end_date,ccid):
   #get the facebook data
   fb_data(request, report_model, fb_tok, fbstartDate, fbendDate)
   
-  total()
   organize()
+  total()
   return redirect("../../../../view")
   
 def organize():
