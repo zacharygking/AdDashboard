@@ -1,12 +1,11 @@
 # AdDashboard
 Dashboard for management of campaign data
 
-Dependencies
--googleads
--facebook python SDK
--django
--allauth
--psycopg2
--django-excel
--pyexcel
+Dependencies <br>
+-googleads <br>
+-facebookads <br>
+-django <br>
+-django-allauth <br>
+-django-excel <br>
+-pyexcel-xls <br>
 
