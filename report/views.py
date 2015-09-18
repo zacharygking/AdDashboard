@@ -652,14 +652,20 @@ def index(request):
   return render(request, 'report/index.html', {'fb' : loginlist[0], 'google' : loginlist[1]})
 
 def select(request):
+	account_list = FacebookAccount.objects.all()
+	return render(request, 'report/select.html', {'account_list':account_list})
+
+
+def grandview(request, account_id):
   report = Report.objects.get()
   fb_src = Source.objects.get(name='Facebook')
   g_src = Source.objects.get(name='Google')
+  account = FacebookAccount.objects.get(pk=account_id)
   if request.user.username == report.user:
     authenticated = True
   else:
     authenticated = False
-  return render(request, 'report/select.html', {'authenticated':authenticated,'report':report, 'g_src': g_src, 'fb_src':fb_src})
+  return render(request, 'report/grandview.html', {'authenticated':authenticated,'report':report, 'g_src': g_src, 'fb_src':fb_src, 'account':account})
 
 def select_adgroup(request,gcampaign_id,fbacc_id):
   fbacc = FacebookAccount.objects.get(pk=fbacc_id)

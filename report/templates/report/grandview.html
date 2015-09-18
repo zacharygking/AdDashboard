@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+
+<style type ="text/css">
+.btn {
+  -webkit-border-radius: 28;
+  -moz-border-radius: 28;
+  border-radius: 28px;
+  font-family: Arial;
+  color: #ffffff;
+  font-size: 20px;
+  background: #000000;
+  padding: 10px 20px 10px 20px;
+  text-decoration: none;
+}
+
+.btn:hover {
+  background: #056ca8;
+  text-decoration: none;
+}
+
+</style>
+</head>
+<body>
+<center>
+
+{% if not authenticated %}
+	You are not authenticated to view the report currently stored <br>
+	to run a new report click <a href="../../"><u> here </u></a>
+
+{% else %}
+<table border=0>
+<tr>
+	<td colspan="2" align="center">
+		<h1> Report Summary </h1>
+	</td>
+</tr>
+<tr>
+	<td colspan="2" align="center">
+		<u>Report Details:</u><br>
+		Date Taken: {{report.date_taken}}<br>
+		Date Range: {{report.date_range}}<br><br>
+		<hr>
+	</td>
+</tr>
+<tr>
+	<td> 
+		<table border=1>
+		<tr>
+			<td colspan="6" align="center">
+				Google Total Metrics
+				<hr>
+				Account: $account_name
+			</td>
+		</tr>
+		<tr>
+			<td>Clicks</td>
+			<td>Cost</td>
+			<td>Impressions</td>
+			<td>CTR</td>
+			<td>CPC</td>
+			<td>CPM</td>
+		</tr>
+		<tr>
+			<td>{{g_src.clicks}}</td>
+			<td>${{g_src.cost}}</td>
+			<td>{{g_src.impressions}}</td>
+			<td>{{g_src.CTR}}%</td>
+			<td>${{g_src.CPC}}</td>
+			<td>${{g_src.CPM}}</td>
+		</tr>
+		</table>
+	</td>
+	<td> 
+		<table border=1>
+		<tr>
+			<td colspan="6" align="center">
+				Facebook Total Metrics
+				<hr>
+				Account: $account_name
+			</td>
+		</tr>
+		<tr>
+			<td>Clicks</td>
+			<td>Cost</td>
+			<td>Impressions</td>
+			<td>CTR</td>
+			<td>CPC</td>
+			<td>CPM</td>
+		</tr>
+		<tr>
+			<td>{{fb_src.clicks}}</td>
+			<td>${{fb_src.cost}}</td>
+			<td>{{fb_src.impressions}}</td>
+			<td>{{fb_src.CTR}}%</td>
+			<td>${{fb_src.CPC}}</td>
+			<td>${{fb_src.CPM}}</td>
+		</tr>
+		</table>
+	</td>
+</tr>
+<tr>
+	<td colspan="2" align="center">
+		<br><a href="../../spreadsheet/" class="btn"> Download this as an Excel sheet </a> <br><br><hr>
+	</td>
+</tr>
+<tr>
+
+	<td colspan="2" align="center"><h1> Extended Report </h1></td>
+</tr>
+
+<tr>
+	<td align="center"> 
+		Google Goes Here
+	</td>
+	<td align="center">
+		{{account.account_name}}
+	</td>
+</tr>
+
+</table>
+{% endif %}
+
+
+
+</center>
+
+</body>
+</html>

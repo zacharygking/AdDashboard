@@ -1,102 +1,27 @@
-<!DOCTYPE html>
 <html>
 <head>
-
-
-<style type ="text/css">
-.btn {
-  -webkit-border-radius: 28;
-  -moz-border-radius: 28;
-  border-radius: 28px;
-  font-family: Arial;
-  color: #ffffff;
-  font-size: 20px;
-  background: #3498db;
-  padding: 10px 20px 10px 20px;
-  text-decoration: none;
-}
-
-.btn:hover {
-  background: #056ca8;
-  text-decoration: none;
-}
-
-</style>
 </head>
 <body>
 <center>
-
-<br><a href="../spreadsheet/" class="btn"> Download Excel Sheet </a> <br><br><br>
-
-{% if not authenticated %}
-	You are not authenticated to view the report currently stored <br>
-	to run a new report click <a href="../../"><u> here </u></a>
-
-{% else %}
-<table border=0>
-<tr>
-	<td colspan="2" align="center">
-		<h1> Report Summary </h1>
-	</td>
-</tr>
-<tr>
-	<td colspan="2" align="center">
-		<u>Report Details:</u><br>
-		Date Taken: {{report.date_taken}}<br>
-		Date Range: {{report.date_range}}<br><br>
-		<hr>
-	</td>
-</tr>
-<tr>
-	<td> 
-		<table border=1>
-		<tr>
-			<td colspan="3" align="center">
-				Google Total Metrics
-				<hr>
-				Account: $account_name
-			</td>
-		</tr>
-		<tr>
-			<td>Clicks</td>
-			<td>$Cost</td>
-			<td>Impressions</td>
-		</tr>
-		<tr>
-			<td>{{g_src.clicks}}</td>
-			<td>${{g_src.cost}}</td>
-			<td>{{g_src.impressions}}</td>
-		</tr>
-		</table>
-	</td>
-	<td> 
-		<table border=1>
-		<tr>
-			<td colspan="3" align="center">
-				Facebook Total Metrics
-				<hr>
-				Account: $account_name
-			</td>
-		</tr>
-		<tr>
-			<td>Clicks</td>
-			<td>Cost</td>
-			<td>Impressions</td>
-		</tr>
-		<tr>
-			<td>{{fb_src.clicks}}</td>
-			<td>{{fb_src.cost}}</td>
-			<td>{{fb_src.impressions}}</td>
-		</tr>
-		</table>
-	</td>
-</tr>
-</table>
-{% endif %}
-
-
-
+<h1> {{ 'Welcome to the idmloco Ad Report Dashboard' }} </h1>
+    <h3> You are Logged in as <font color="green">{{ request.user.username }} </font></h3>
+    To continue, select the client to report for:
+    <form>
+    <table border=0>
+    <tr>
+    	<td align="left">
+    		{% for account in account_list %}
+    		<input type="radio" id="{{account.id}}" name="account" value="{{account.id}}" checked="checked"/>
+			<label for="{{account.id}}">{{account.account_name}}</label><br/>
+    		{% endfor %}
+    	</td>
+    </tr>
+    <tr>
+    	<td align="center">
+    		<input type="submit" onclick="window.location = window.location + account.value; return false;"/> 
+    	</td>
+    </tr>
+	</form>
 </center>
-
 </body>
 </html>
