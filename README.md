@@ -1,7 +1,7 @@
 # AdDashboard
 Dashboard for management of campaign data
 
-Dependencies
+Dependencies <br>
 -googleads <br>
 -facebookads <br>
 -django <br>
