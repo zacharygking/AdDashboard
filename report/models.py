@@ -83,9 +83,11 @@ class FacebookCampaign(models.Model):
 	campaign_id = models.CharField(max_length=200, default='')
 	status = models.CharField(max_length=200, default='')
 	clicks = models.BigIntegerField(default=0)
-	cpc = models.FloatField(default=0)
 	cost = models.FloatField(default=0)
 	impressions = models.BigIntegerField(default=0)
+	CPC = models.FloatField(default=0)
+	CPM = models.FloatField(default=0)
+	CTR = models.FloatField(default=0)
 	account = models.ForeignKey(FacebookAccount)
 	
 	def __str__(self):
