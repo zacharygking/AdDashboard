@@ -705,12 +705,12 @@ def grandview(request, account_id):
   report = Report.objects.get()
   fb_src = Source.objects.get(name='Facebook')
   g_src = Source.objects.get(name='Google')
-  account = FacebookAccount.objects.get(pk=account_id)
+  fb_account = FacebookAccount.objects.get(pk=account_id)
   if request.user.username == report.user:
     authenticated = True
   else:
     authenticated = False
-  return render(request, 'report/grandview.html', {'authenticated':authenticated,'report':report, 'g_src': g_src, 'fb_src':fb_src, 'account':account})
+  return render(request, 'report/grandview.html', {'authenticated':authenticated,'report':report, 'g_src': g_src, 'fb_src':fb_src, 'fb_account':fb_account})
 
 def select_adgroup(request,gcampaign_id,fbacc_id):
   fbacc = FacebookAccount.objects.get(pk=fbacc_id)
