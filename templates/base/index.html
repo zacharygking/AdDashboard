@@ -46,7 +46,7 @@ history.pushState('', document.title, window.location.pathname);
     {% if fb %}
       <font color="green"> Your account is linked with a Facebook account <br></font>
           <p>Start Date: <input type="date" id="start_date" name="start_date" /></p>
-          <p>End Date:<input type="date" id="end_date" name="end_date"/></p>
+          <p>End Date:<input type="date" id="end_date" name="end_date"/></p><br>
           <input type="submit" onclick="window.location = window.location + 'report/generate/' + start_date.value + '/' + end_date.value; return false;"/>
         </form>
         <br> or
