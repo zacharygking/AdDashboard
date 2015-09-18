@@ -5,7 +5,7 @@ Dependencies
 -googleads
 -facebookads
 -django
--allauth
+-django-allauth
 -django-excel
 -pyexcel
 
