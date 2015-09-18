@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from datetime import datetime
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse
-from report.models import Report, Source, GoogleClient, GoogleCampaign, GoogleAdGroup, GoogleKeyword, FacebookCampaign, FacebookAccount
+from report.models import Report, Source, adSource, GoogleClient, GoogleCampaign, GoogleAdGroup, GoogleKeyword, FacebookCampaign, FacebookAccount
 
 #import for google
 import logging
@@ -61,6 +61,7 @@ def collect(request,start_date,end_date,ccid):
     report_model.save()
     all_google_data(request, client_id)
     all_fb_data(request, report_model, fb_tok)
+    organize()
     total()
     return redirect("../../../../view")
   elif(start_date == '2' and end_date == '2'):
@@ -68,6 +69,7 @@ def collect(request,start_date,end_date,ccid):
     report_model.save()
     month_google_data(request, client_id)
     month_fb_data(request, report_model, fb_tok)
+    organize()
     total()
     return redirect("../../../../view")
 	
@@ -96,7 +98,50 @@ def collect(request,start_date,end_date,ccid):
   fb_data(request, report_model, fb_tok, fbstartDate, fbendDate)
   
   total()
+  organize()
   return redirect("../../../../view")
+  
+def organize():
+	adSource.objects.all().delete()
+	
+	for goog_group in GoogleAdGroup.objects.all():
+		goog_name = goog_group.ad_group_name
+		category = adSource()
+		category.provider = 'Google'
+		category.name = goog_name
+		
+		for goog_key in GoogleKeyword.objects.all():
+			if goog_key.adgroup.ad_group_name == goog_name:
+				category.impressions = category.impressions + goog_key.impressions
+				category.cost = category.cost + goog_key.cost
+				category.clicks = category.clicks + goog_key.clicks
+		
+		if not category.impressions == 0:
+			category.CTR = round(category.clicks * 100/category.impressions,2)
+			category.CPM = round(category.cost * 1000 / category.impressions,2)
+		if not category.clicks == 0:
+			category.CPC = round(category.cost/category.clicks,2)
+		
+		category.save()  
+	
+	for fb_group in FacebookAccount.objects.all():
+		fb_name = fb_group.account_name
+		category = adSource()
+		category.provider = 'Facebook'
+		category.name = fb_name
+		
+		for fb_cam in FacebookCampaign.objects.all():
+			if fb_cam.account.account_name == fb_name:
+				category.impressions = category.impressions + fb_cam.impressions
+				category.cost = category.cost + fb_cam.cost
+				category.clicks = category.clicks + fb_cam.clicks
+		
+		if not category.impressions == 0:
+			category.CTR = round(category.clicks * 100/category.impressions,2)
+			category.CPM = round(category.cost * 1000 / category.impressions,2)
+		if not category.clicks == 0:
+			category.CPC = round(category.cost/category.clicks,2)
+		category.save()
   
 def total():
 	Source.objects.all().delete()
@@ -151,7 +196,7 @@ def total():
 	
 def download(request):
     query_sets = Source.objects.filter()
-    column_names = ['name', 'clicks', 'impressions', 'cost']
+    column_names = ['name', 'clicks', 'impressions', 'CTR', 'CPC', 'CPM', 'cost']
     return excel.make_response_from_query_sets(query_sets, column_names, 'xls')
 
 '''
