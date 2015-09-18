@@ -104,7 +104,7 @@
 </tr>
 <tr>
 	<td colspan="2" align="center">
-		<br><a href="../../spreadsheet/" class="btn"> Download this as an Excel sheet </a> <br><br><hr>
+		<br><a href="../../spreadsheet/{{fb_account.id}}" class="btn"> Download this as an Excel sheet </a> <br><br><hr>
 	</td>
 </tr>
 <tr>
@@ -117,7 +117,26 @@
 		Google Goes Here
 	</td>
 	<td align="center">
-			</td>
+			{% for campaign in campaign_list %}
+			{{campaign.name}}
+			<table border=1>
+			<tr>
+				<td>Clicks</td>
+				<td>Cost</td>
+				<td>Impressions</td>
+				<td>CPC</td>
+			</tr>
+			<tr>
+				<td>{{campaign.clicks}}</td>
+				<td>${{campaign.cost}}</td>
+				<td>{{campaign.impressions}}</td>
+				<td>${{campaign.cpc}}</td>
+			</tr>
+			</table>
+			<br>
+		{% endfor %}
+
+	</td>
 </tr>
 
 </table>

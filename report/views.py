@@ -194,7 +194,7 @@ def total():
 	total.CPM = round(total.cost * 1000/total.impressions,2)
 	total.save()
 	
-def download(request):
+def download(request, account_id):
     query_sets = Source.objects.filter()
     column_names = ['name', 'clicks', 'impressions', 'CTR', 'CPC', 'CPM', 'cost']
     return excel.make_response_from_query_sets(query_sets, column_names, 'xls')
@@ -706,11 +706,12 @@ def grandview(request, account_id):
   fb_src = Source.objects.get(name='Facebook')
   g_src = Source.objects.get(name='Google')
   fb_account = FacebookAccount.objects.get(pk=account_id)
+  campaign_list = FacebookCampaign.objects.filter(account=fb_account)
   if request.user.username == report.user:
     authenticated = True
   else:
     authenticated = False
-  return render(request, 'report/grandview.html', {'authenticated':authenticated,'report':report, 'g_src': g_src, 'fb_src':fb_src, 'fb_account':fb_account})
+  return render(request, 'report/grandview.html', {'authenticated':authenticated,'report':report, 'g_src': g_src, 'fb_src':fb_src, 'fb_account':fb_account, 'campaign_list':campaign_list})
 
 def select_adgroup(request,gcampaign_id,fbacc_id):
   fbacc = FacebookAccount.objects.get(pk=fbacc_id)
