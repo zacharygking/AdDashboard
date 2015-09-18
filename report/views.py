@@ -151,11 +151,7 @@ def total():
 	google_clicks = 0
 	google_impressions = 0
 	google_cost = 0
-	'''
-	facebook_clicks = 0
-	facebook_impressions = 0
-	facebook_cost = 0
-	'''
+
 	for current_google in GoogleKeyword.objects.all():
 		google_clicks = google_clicks + current_google.clicks
 		google_impressions = google_impressions + current_google.impressions
@@ -172,33 +168,7 @@ def total():
 	if not google_model.clicks == 0:
 		google_model.CPC = round(google_model.cost/google_model.clicks,2)
 	google_model.save()
-'''
-	for current_facebook in FacebookCampaign.objects.all():
-		facebook_clicks = facebook_clicks + current_facebook.clicks
-		facebook_impressions = facebook_impressions + current_facebook.impressions
-		facebook_cost = facebook_cost + current_facebook.cost
-		
-	facebook_model = Source()
-	facebook_model.name = 'Facebook'
-	facebook_model.clicks = facebook_clicks
-	facebook_model.impressions = facebook_impressions
-	facebook_model.cost = round(facebook_cost,2)
-	facebook_model.CTR = round(facebook_model.clicks * 100/facebook_model.impressions,2)
-	facebook_model.CPC = round(facebook_model.cost/facebook_model.clicks,2)
-	facebook_model.CPM = round(facebook_model.cost * 1000 / facebook_model.impressions,2)
-	facebook_model.save()
-	
-	total = Source()
-	total.name = 'TOTAL'
-	total.clicks = google_model.clicks + facebook_model.clicks
-	total.impressions = google_model.impressions + facebook_model.impressions 
-	total.cost = google_model.cost + facebook_model.cost
-	total.CTR = round(total.clicks * 100/total.impressions,2)
-	total.CPC = round(total.cost/total.clicks,2)
-	total.CPM = round(total.cost * 1000/total.impressions,2)
-	total.save()
-'''
-	
+
 def download(request, account_id):
 	facebook_account = FacebookAccount.objects.get(account_id=account_id)
 	facebook_adSource = adSource.objects.get(name=facebook_account.account_name)
