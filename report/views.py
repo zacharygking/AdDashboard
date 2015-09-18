@@ -198,9 +198,37 @@ def total():
 '''
 	
 def download(request, account_id):
-    query_sets = [Source.objects.filter(name='Google'),adSource.objects.filter(account_id=account_id)]
-    column_names = ['name', 'clicks', 'impressions', 'CTR', 'CPC', 'CPM', 'cost']
-    return excel.make_response_from_query_sets(query_sets, column_names, 'xls')
+	facebook_account = FacebookAcccount.objects.filter(account_id=account_id)
+	facebook_adSource = adSource.objects.filter(name=facebook.account_name)
+	google = Source.objects.filter(name='Google')
+	addUp(google, facebook_adSource)
+    	query_sets = Source.objects.filter()
+    	column_names = ['name', 'clicks', 'impressions', 'CTR', 'CPC', 'CPM', 'cost']
+    	return excel.make_response_from_query_sets(query_sets, column_names, 'xls')
+
+def addUp(google, facebook_adSource):
+	Source.objects.filter(name='Facebook').delete()
+	Source.objects.filter(name='TOTAL').delete()
+
+	facebook = Source()
+	facebook.name = 'Facebook'
+	facebook.clicks = facebook_adSource.clicks
+	facebook.impressions = facebook_adSource.clicks
+	facebook.cost = faceboook_adSource.cost
+	facebook.CTR = facebook_adSource.CTR
+	facebook.CPC = facebook_adSource.CPC
+	facebook.CPM = facebook_adSource.CPM
+	facebook.save()
+	
+	total = Source()
+	total.name = 'TOTAL'
+	total.clicks = google.clicks + facebook.clicks
+	total.impressions = google.impressions + facebook.impressions 
+	total.cost = google.cost + facebook.cost
+	total.CTR = round(total.clicks * 100/total.impressions,2)
+	total.CPC = round(total.cost/total.clicks,2)
+	total.CPM = round(total.cost * 1000/total.impressions,2)
+	total.save()
 
 '''
 	method will create a report downloader implemented by google 
