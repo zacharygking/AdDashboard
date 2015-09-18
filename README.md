@@ -10,7 +10,3 @@ Dependencies
 -django-excel
 -pyexcel
 
-
-
-
-pip install --upgrade google-api-python-client
