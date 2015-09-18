@@ -7,5 +7,5 @@ Dependencies <br>
 -django <br>
 -django-allauth <br>
 -django-excel <br>
--pyexcel <br>
+-pyexcel-xls <br>
 
