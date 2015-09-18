@@ -198,7 +198,7 @@ def total():
 '''
 	
 def download(request, account_id):
-	facebook_account = FacebookAcccount.objects.get(account_id=account_id)
+	facebook_account = FacebookAccount.objects.get(account_id=account_id)
 	facebook_adSource = adSource.objects.get(name=facebook_account.account_name)
 	google = Source.objects.get(name='Google')
 	addUp(google, facebook_adSource)
@@ -213,8 +213,8 @@ def addUp(google, facebook_adSource):
 	facebook = Source()
 	facebook.name = 'Facebook'
 	facebook.clicks = facebook_adSource.clicks
-	facebook.impressions = facebook_adSource.clicks
-	facebook.cost = faceboook_adSource.cost
+	facebook.impressions = facebook_adSource.impressions
+	facebook.cost = facebook_adSource.cost
 	facebook.CTR = facebook_adSource.CTR
 	facebook.CPC = facebook_adSource.CPC
 	facebook.CPM = facebook_adSource.CPM
