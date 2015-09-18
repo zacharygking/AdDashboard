@@ -46,7 +46,7 @@
 	</td>
 </tr>
 <tr>
-	<td> 
+	<td align="center"> 
 		<table border=1>
 		<tr>
 			<td colspan="6" align="center">
@@ -73,7 +73,7 @@
 		</tr>
 		</table>
 	</td>
-	<td> 
+	<td align="center"> 
 		<table border=1>
 		<tr>
 			<td colspan="6" align="center">
@@ -113,10 +113,33 @@
 </tr>
 
 <tr>
-	<td align="center"> 
-		Google Goes Here
+	<td align="center" valign="top"> 
+			<h4>Individual Campaign Performance</h4>
+			{% for campaign in g_adsource %}
+			{{campaign.name}}
+			<table border=1>
+			<tr>
+				<td>Clicks</td>
+				<td>Cost</td>
+				<td>Impressions</td>
+				<td>CTR</td>
+				<td>CPC</td>
+				<td>CPM</td>
+			</tr>
+			<tr>
+				<td>{{campaign.clicks}}</td>
+				<td>${{campaign.cost}}</td>
+				<td>{{campaign.impressions}}</td>
+				<td>{{campaign.CTR}}%</td>
+				<td>${{campaign.CPC}}</td>
+				<td>${{campaign.CPM}}</td
+			</tr>
+			</table>
+			<br>
+		{% endfor %}
+
 	</td>
-	<td align="center">
+	<td align="center" valign="top">
 			<h4>Individual Campaign Performance</h4>
 			{% for campaign in campaign_list %}
 			{{campaign.name}}
