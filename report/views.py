@@ -198,9 +198,9 @@ def total():
 '''
 	
 def download(request, account_id):
-	facebook_account = FacebookAcccount.objects.filter(pk=account_id)
-	facebook_adSource = adSource.objects.filter(name=facebook_account.account_name)
-	google = Source.objects.filter(name='Google')
+	facebook_account = FacebookAcccount.objects.get(pk=account_id)
+	facebook_adSource = adSource.objects.get(name=facebook_account.account_name)
+	google = Source.objects.get(name='Google')
 	addUp(google, facebook_adSource)
 	query_sets = Source.objects.filter()
 	column_names = ['name', 'clicks', 'impressions', 'CTR', 'CPC', 'CPM', 'cost']
