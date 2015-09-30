@@ -155,3 +155,4 @@ STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = '/'
 
 STATIC_ROOT = 'static'
+ADMIN_MEDIA_PREFIX = '/static/admin/'
