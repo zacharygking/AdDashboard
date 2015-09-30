@@ -153,3 +153,5 @@ SITE_ID = 1
 STATIC_URL = '/static/'
 
 LOGIN_REDIRECT_URL = '/'
+
+STATIC_ROOT = 'static'
