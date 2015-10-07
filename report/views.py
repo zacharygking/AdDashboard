@@ -316,7 +316,7 @@ def fb_data(request, report_model, fb_tok, fbstartDate, fbendDate):
 	index = 0
   	
 	for current_account in my_accounts:
-		if index == 5:
+		if index == 25:
 			break
 		
 		index = index + 1
@@ -478,7 +478,7 @@ def all_fb_data(request, report_model, fb_tok):
 	index = 0
   	
 	for current_account in my_accounts:
-		if index == 5:
+		if index == 25:
 			break
 		
 		index = index + 1
@@ -635,7 +635,7 @@ def month_fb_data(request, report_model, fb_tok):
 	index = 0
   	
 	for current_account in my_accounts:
-		if index == 5:
+		if index == 25:
 			break
 		
 		index = index + 1
