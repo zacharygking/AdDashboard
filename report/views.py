@@ -360,7 +360,7 @@ def fb_data(request, report_model, fb_tok, fbstartDate, fbendDate):
     			'clicks',
 			'spend'
     		}
-    			try:
+    		try:
 				data = str(current_campaign.get_insights(fields=fields,params=params))
 			except:
 				pass
@@ -510,7 +510,6 @@ def all_fb_data(request, report_model, fb_tok):
 				AdCampaign.Field.name,
     			AdCampaign.Field.status,
     			AdCampaign.Field.id]
-    			
     			try:
 				current_campaign.remote_read(fields=fields, params=params)
 			except:
@@ -521,7 +520,7 @@ def all_fb_data(request, report_model, fb_tok):
     			'clicks',
 			'spend'
     		}
-        		try:
+    		try:
 				data = str(current_campaign.get_insights(fields=fields))
 			except:
 				pass
