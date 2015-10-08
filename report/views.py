@@ -352,14 +352,17 @@ def fb_data(request, report_model, fb_tok, fbstartDate, fbendDate):
 			try:
 				current_campaign.remote_read(fields=fields, params=params)
 			except:
-				continue
+				pass
 			
 			fields = {    			
     			'impressions',
     			'clicks',
 			'spend'
     		}
-			data = str(current_campaign.get_insights(fields=fields,params=params))
+    			try:
+				data = str(current_campaign.get_insights(fields=fields,params=params))
+			except:
+				pass
 			data = '['+data[12:]
 			try:
 				ast.literal_eval(data)
@@ -510,15 +513,17 @@ def all_fb_data(request, report_model, fb_tok):
 			try:
 				current_campaign.remote_read(fields=fields, params=params)
 			except:
-				continue
+				pass
 			
 			fields = {    			
     			'impressions',
     			'clicks',
 			'spend'
     		}
-        
-			data = str(current_campaign.get_insights(fields=fields))
+        		try:
+				data = str(current_campaign.get_insights(fields=fields))
+			except:
+				pass
 			data = '['+data[12:]
 			try:
 				ast.literal_eval(data)
@@ -674,15 +679,17 @@ def month_fb_data(request, report_model, fb_tok):
 			try:
 				current_campaign.remote_read(fields=fields, params=params)
 			except:
-				continue
+				pass
 			
 			fields = {    			
     			'impressions',
     			'clicks',
 			'spend'
     		}
-			
-			data = str(current_campaign.get_insights(fields=fields,params=params))
+			try:
+				data = str(current_campaign.get_insights(fields=fields,params=params))
+			except:
+				pass
 			data = '['+data[12:]
 			try:
 				ast.literal_eval(data)
