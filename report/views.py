@@ -349,8 +349,10 @@ def fb_data(request, report_model, fb_tok, fbstartDate, fbendDate):
 					'until': fbendDate,
 				}
 			}	
-		
-			current_campaign.remote_read(fields=fields,params=params)
+			try:
+				current_campaign.remote_read(fields=fields, params=params)
+			except:
+				continue
 			
 			fields = {    			
     			'impressions',
@@ -505,7 +507,10 @@ def all_fb_data(request, report_model, fb_tok):
     			AdCampaign.Field.status,
     			AdCampaign.Field.id]
 		
-			current_campaign.remote_read(fields=fields)
+			try:
+				current_campaign.remote_read(fields=fields, params=params)
+			except:
+				continue
 			
 			fields = {    			
     			'impressions',
@@ -666,7 +671,10 @@ def month_fb_data(request, report_model, fb_tok):
 				'date_preset': 'last_30_days'
 			}	
 		
-			current_campaign.remote_read(fields=fields, params=params)
+			try:
+				current_campaign.remote_read(fields=fields, params=params)
+			except:
+				continue
 			
 			fields = {    			
     			'impressions',
