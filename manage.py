@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-export PYTHONPATH=/home/idmloco3/webapps/addashboard/lib/python2.7/
+
 
 import os
 import sys
