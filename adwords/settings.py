@@ -26,7 +26,9 @@ SECRET_KEY = 'k2fxr0jo5dqmdv@$y$8bfvzi-_u72*0rxw@i$oxcbh%c8g=zw#'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+'http://addashboard.idmloco3.webfactional.com/',
+]
 
 
 # Application definition
