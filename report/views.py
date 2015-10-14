@@ -844,5 +844,5 @@ def result(request, campaign_id):
   
 def getid(request,start_date,end_date):
   ccid_list = GoogleClient.objects.filter(user=request.user).order_by('client_name')
-  get_fb_accounts()
+  get_fb_accounts(request)
   return render(request,'report/id.html',{'start_date': start_date, 'end_date': end_date, 'ccid_list':ccid_list})
