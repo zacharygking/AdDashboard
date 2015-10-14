@@ -830,6 +830,7 @@ def adgroup(request, adgroup_id):
 def campaigns(request):
   try:
     campaign_list = GoogleCampaign.objects.all()
+    get_fb_accounts()
     return render(request, 'report/campaigns.html', {'campaigns': campaign_list})
   except ObjectDoesNotExist:
     return HttpResponse("No Campaigns Exist")
