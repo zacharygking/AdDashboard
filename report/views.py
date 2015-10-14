@@ -32,10 +32,13 @@ import pyexcel.ext.xls
 logging.basicConfig(level=logging.INFO)
 logging.getLogger('suds.transport').setLevel(logging.DEBUG)
 
-def collect(request,start_date,end_date,ccid):
-  client = GoogleClient.objects.get(pk=ccid)
+def collect(request,start_date,end_date,gcid,fcid):
+  client = GoogleClient.objects.get(pk=gcid)
   client_id = client.client_id
   client_name = client.client_name
+  
+  #account = FacebookAccount.objects.get(account_name='Western Health Advantage')
+  account = FacebookAccount.objects.get(pk=fcid)
   try:
     fb_acc = SocialAccount.objects.get(user_id = request.user.id,provider='facebook')
     #google_acc = SocialAccount.objects.get(user_id = request.user.id,provider='google')
@@ -49,14 +52,13 @@ def collect(request,start_date,end_date,ccid):
   GoogleAdGroup.objects.all().delete()
   GoogleKeyword.objects.all().delete()
   FacebookCampaign.objects.all().delete()
-  FacebookAccount.objects.all().delete()
+  #FacebookAccount.objects.all().delete()
   Report.objects.all().delete()
 
   report_model = Report()
   report_model.user = request.user.username
   report_model.date_taken = datetime.now()
   report_model.google_account = client_name
-
 
   if(start_date == '1' and end_date == '1'):
     report_model.date_range = "All Time"
@@ -69,8 +71,10 @@ def collect(request,start_date,end_date,ccid):
   elif(start_date == '2' and end_date == '2'):
     report_model.date_range = "Last 30 Days"
     report_model.save()
+    account.report = report_model
+    account.save()
     month_google_data(request, client_id)
-    month_fb_data(request, report_model, fb_tok)
+    month_fb_data(request, account)
     organize()
     total()
     return redirect("../../../../view")
@@ -625,7 +629,14 @@ def month_google_data(request, client_id):
 			data.adgroup = adGroup
 			data.save()
 
-def month_fb_data(request, report_model, fb_tok):
+def get_fb_accounts(request):	
+	FacebookAccount.objects.all().delete()
+	try:
+		fb_acc = SocialAccount.objects.get(user_id = request.user.id,provider='facebook')
+		fb_tok = SocialToken.objects.get(account=fb_acc)
+	except:
+		return HttpResponse("error connecting Social Accounts")
+	
 	#setting the user information
 	my_app_id = '1604519246476149'
 	my_app_secret = '5a93aee73f1d2856dd542f53e268e483'
@@ -635,15 +646,16 @@ def month_fb_data(request, report_model, fb_tok):
 	FacebookAdsApi.init(my_app_id, my_app_secret, my_access_token)
 	me = objects.AdUser(fbid='me')
 	my_accounts = list(me.get_ad_accounts())
-  
+
 	#does it have ad accounts
 	if len(my_accounts) == 0:
 		return HttpResponse("no Ad Accounts Exist")
 	
-	#!!!!important note, facebook allows us to only check upto 5
-	#accounts, need to update policy statement
+	#important note, facebook allows us to only check upto 25
+	#accounts, we did the privacy note now just need to check if we can
+	#increase the amount
 	index = 0
-  	
+	
 	for current_account in my_accounts:
 		if index == 25:
 			break
@@ -660,59 +672,102 @@ def month_fb_data(request, report_model, fb_tok):
 		account_model = FacebookAccount()
 		account_model.account_name = str(current_account[AdAccount.Field.name])
 		account_model.account_id = str(current_account[AdAccount.Field.account_id])
-		account_model.report = report_model
+		#account_model.report = report_model
 		account_model.save()
+
+def month_fb_data(request, account_model):
+
+	try:
+		fb_acc = SocialAccount.objects.get(user_id = request.user.id,provider='facebook')
+		fb_tok = SocialToken.objects.get(account=fb_acc)
+	except:
+		return HttpResponse("error connecting Social Accounts")
+	
+	#setting the user information
+	my_app_id = '1604519246476149'
+	my_app_secret = '5a93aee73f1d2856dd542f53e268e483'
+	my_access_token = fb_tok.token
+	
+	#gets the ad accounts in a single, pre-existing facebook account
+	FacebookAdsApi.init(my_app_id, my_app_secret, my_access_token)
+	me = objects.AdUser(fbid='me')
+	my_accounts = list(me.get_ad_accounts())
+
+	#does it have ad accounts
+	if len(my_accounts) == 0:
+		return HttpResponse("no Ad Accounts Exist")
+	
+	#important note, facebook allows us to only check upto 25
+	#accounts, we did the privacy note now just need to check if we can
+	#increase the amount
+	index = 0
+	
+	for current_account in my_accounts:
+		if index == 25:
+			break
 		
-		ad_campaigns = current_account.get_ad_campaigns()
+		index = index + 1
+		
+		fields=[
+			AdAccount.Field.account_id,
+			AdAccount.Field.name
+			]
+		
+		current_account.remote_read(fields=fields)
+		
+		if account_model.account_name == str(current_account[AdAccount.Field.name]):
+			break
+		
+	ad_campaigns = current_account.get_ad_campaigns()
 				
-		for current_campaign in ad_campaigns:
+	for current_campaign in ad_campaigns:
 		
-			fields=[
-				AdCampaign.Field.name,
-    			AdCampaign.Field.status,
-    			AdCampaign.Field.id]
+		fields=[
+			AdCampaign.Field.name,
+    		AdCampaign.Field.status,
+    		AdCampaign.Field.id]
 				
-			params = {
-				'date_preset': 'last_30_days'
-			}	
+		params = {
+			'date_preset': 'last_30_days'
+		}	
 		
-			try:
-				current_campaign.remote_read(fields=fields, params=params)
-			except:
-				pass
+		try:
+			current_campaign.remote_read(fields=fields, params=params)
+		except:
+			pass
 			
-			fields = {    			
-    			'impressions',
-    			'clicks',
-			'spend'
-    		}
-			try:
-				data = str(current_campaign.get_insights(fields=fields,params=params))
-			except:
-				pass
-			data = '['+data[12:]
-			try:
-				ast.literal_eval(data)
-				json_string = json.dumps(data)
-				parsed_data = json.loads(data)				
-			except:
-				continue
+		fields = {    			
+    		'impressions',
+    		'clicks',
+		'spend'
+    	}
+		try:
+			data = str(current_campaign.get_insights(fields=fields,params=params))
+		except:
+			pass
+		data = '['+data[12:]
+		try:
+			ast.literal_eval(data)
+			json_string = json.dumps(data)
+			parsed_data = json.loads(data)				
+		except:
+			continue
 			
-			campaign_model = FacebookCampaign()
-			campaign_model.name = str(current_campaign[AdCampaign.Field.name])
-			campaign_model.campaign_id = str(current_campaign[AdCampaign.Field.id])
-			campaign_model.status = str(current_campaign[AdCampaign.Field.status])
-			campaign_model.clicks = int(parsed_data[0]['clicks'])
-			campaign_model.impressions = int(parsed_data[0]['impressions'])
-			campaign_model.cost = float(parsed_data[0]['spend'])
-			if not campaign_model.impressions == 0:
-				campaign_model.CTR = round(campaign_model.clicks * 100/campaign_model.impressions,2)
-				campaign_model.CPM = round(campaign_model.cost * 1000 / campaign_model.impressions,2)
-			if not campaign_model.clicks == 0:
-				campaign_model.CPC = round(campaign_model.cost/campaign_model.clicks,2)
-			campaign_model.account = account_model
-			campaign_model.save()	
-			
+		campaign_model = FacebookCampaign()
+		campaign_model.name = str(current_campaign[AdCampaign.Field.name])
+		campaign_model.campaign_id = str(current_campaign[AdCampaign.Field.id])
+		campaign_model.status = str(current_campaign[AdCampaign.Field.status])
+		campaign_model.clicks = int(parsed_data[0]['clicks'])
+		campaign_model.impressions = int(parsed_data[0]['impressions'])
+		campaign_model.cost = float(parsed_data[0]['spend'])
+		if not campaign_model.impressions == 0:
+			campaign_model.CTR = round(campaign_model.clicks * 100/campaign_model.impressions,2)
+			campaign_model.CPM = round(campaign_model.cost * 1000 / campaign_model.impressions,2)
+		if not campaign_model.clicks == 0:
+			campaign_model.CPC = round(campaign_model.cost/campaign_model.clicks,2)
+		campaign_model.account = account_model
+		campaign_model.save()	
+		
 def index(request):
   try:
     fb_acc = SocialAccount.objects.get(user_id = request.user.id,provider='facebook')
