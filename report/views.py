@@ -674,7 +674,7 @@ def get_fb_accounts(request):
 		account_model.account_id = str(current_account[AdAccount.Field.account_id])
 		#account_model.report = report_model
 		if not account_model.account_name == "": 
-			accountccount_model.save()
+			account_model.save()
 
 def month_fb_data(request, account_model):
 
