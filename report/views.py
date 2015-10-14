@@ -830,7 +830,6 @@ def adgroup(request, adgroup_id):
 def campaigns(request):
   try:
     campaign_list = GoogleCampaign.objects.all()
-    get_fb_accounts()
     return render(request, 'report/campaigns.html', {'campaigns': campaign_list})
   except ObjectDoesNotExist:
     return HttpResponse("No Campaigns Exist")
@@ -845,4 +844,5 @@ def result(request, campaign_id):
   
 def getid(request,start_date,end_date):
   ccid_list = GoogleClient.objects.filter(user=request.user).order_by('client_name')
+  get_fb_accounts()
   return render(request,'report/id.html',{'start_date': start_date, 'end_date': end_date, 'ccid_list':ccid_list})
