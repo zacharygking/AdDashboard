@@ -785,7 +785,7 @@ def index(request):
 
   return render(request, 'report/index.html', {'fb' : loginlist[0], 'google' : loginlist[1]})
 
-def select(request):
+def select(request, gcid):
 	account_list = FacebookAccount.objects.all().order_by('account_name')
 	report = Report.objects.get()
 	if report.user == request.user.username:
