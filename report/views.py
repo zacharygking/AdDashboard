@@ -69,7 +69,8 @@ def collect(request,start_date,end_date,gcid,fcid):
     all_fb_data(request, account)
     organize()
     total()
-    return redirect("../../../../view")
+    redir = "../../../../../view/" + str(gcid) + '/'+ str(fcid)
+    return redirect(redir)
   elif(start_date == '2' and end_date == '2'):
     report_model.date_range = "Last 30 Days"
     report_model.save()
@@ -112,7 +113,8 @@ def collect(request,start_date,end_date,gcid,fcid):
   
   organize()
   total()
-  return redirect("../../../../view/")
+  redir = "../../../../../view/" + str(gcid) + '/'+ str(fcid)
+  return redirect(redir)
   
 def organize():
 	adSource.objects.all().delete()
