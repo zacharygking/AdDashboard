@@ -532,7 +532,7 @@ def all_fb_data(request, account_model):
    			AdCampaign.Field.status,
    			AdCampaign.Field.id]
 		try:
-			current_campaign.remote_read(fields=fields, params=params)
+			current_campaign.remote_read(fields=fields)
 		except:
 			pass
 			
