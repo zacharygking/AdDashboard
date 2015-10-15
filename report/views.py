@@ -77,7 +77,9 @@ def collect(request,start_date,end_date,gcid,fcid):
     month_fb_data(request, account)
     organize()
     total()
-    return redirect("../../../../view")
+    #"../../../../view" 
+    redir = "../../../../../view/" + str(gcid) + '/'+ str(fcid)
+    return redirect(redir)
 	
   i_y = start_date[0] + start_date[1] + start_date[2] + start_date[3]
   i_m = start_date[5] + start_date[6]
@@ -105,7 +107,7 @@ def collect(request,start_date,end_date,gcid,fcid):
   
   organize()
   total()
-  return redirect("../../../../view")
+  return redirect("../../../../view/")
   
 def organize():
 	adSource.objects.all().delete()
@@ -668,12 +670,13 @@ def get_fb_accounts(request):
 			]
 		
 		current_account.remote_read(fields=fields)
-		
+		if AdAccount.Field.name == "":
+			pass
 		account_model = FacebookAccount()
 		account_model.account_name = str(current_account[AdAccount.Field.name])
 		account_model.account_id = str(current_account[AdAccount.Field.account_id])
 		#account_model.report = report_model
-		if not account_model.account_name == "": 
+		if not account_model.account_name == "":
 			account_model.save()
 
 def month_fb_data(request, account_model):
@@ -796,11 +799,11 @@ def select(request, gcid, start_date, end_date):
 	return render(request, 'report/select.html', {'account_list':account_list, 'authenticated':authenticated})
 
 
-def grandview(request, account_id):
+def grandview(request, gcid, fcid):
   report = Report.objects.get()
   #fb_src = Source.objects.get(name='Facebook')
   g_src = Source.objects.get(name='Google')
-  fb_account = FacebookAccount.objects.get(pk=account_id)
+  fb_account = FacebookAccount.objects.get(pk=fcid)
   fb_adsource = adSource.objects.get(provider='Facebook', name=fb_account.account_name)
   campaign_list = FacebookCampaign.objects.filter(account=fb_account).order_by('name')
   g_adsource = adSource.objects.filter(provider='Google').order_by('name')

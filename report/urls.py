@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns = [
     url(r'^view/$', views.select, name='select'),
-    url(r'^view/(?P<account_id>[0-9]+)/$', views.grandview, name="grandview"),
+    url(r'^view/(?P<gcid>[0-9]+)/(?P<fcid>[0-9]+)/$', views.grandview, name="grandview"),
     url(r'^view/(?P<gcampaign_id>[0-9]+)/(?P<fbacc_id>[0-9]+)/$', views.select_adgroup, name='select_adgroup'),
     url(r'^view/(?P<gcampaign_id>[0-9]+)/(?P<fbacc_id>[0-9]+)/(?P<gadgroup_id>[0-9]+)/$', views.show_results, name='show_results'),
     url(r'^generate/(?P<start_date>[-A-Za-z0-9_]+)/(?P<end_date>[-A-Za-z0-9_]+)/$', views.getid, name='getid'),
