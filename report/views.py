@@ -143,16 +143,42 @@ def collect2(request,start_date,end_date,gcid,fcid):
   return render(request, 'report/twothree.html')
 
 def collect3(request,start_date,end_date,gcid,fcid):
-  organize()
+  g_organize()
   return render(request, 'report/threefour.html')
 
 def collect4(request,start_date,end_date,gcid,fcid):
+  fb_organize()
+  return render(request, 'report/fourfive.html')
+
+def collect5(request,start_date,end_date,gcid,fcid):
 	total()
-	redir = "../../../../../../../../../view/" + str(gcid) + '/'+ str(fcid)
+	redir = "../../../../../../../../../../view/" + str(gcid) + '/'+ str(fcid)
   	return redirect(redir)
 	total()
   
-def organize():
+def fb_organize():
+ 	for fb_group in FacebookAccount.objects.all():
+		fb_name = fb_group.account_name
+		category = adSource()
+		category.provider = 'Facebook'
+		category.name = fb_name
+		
+		for fb_cam in FacebookCampaign.objects.all():
+			if fb_cam.account.account_name == fb_name:
+				category.impressions = category.impressions + fb_cam.impressions
+				category.cost = category.cost + fb_cam.cost
+				category.clicks = category.clicks + fb_cam.clicks
+				
+		category.cost = round(category.cost,2)
+		
+		if not category.impressions == 0:
+			category.CTR = round(category.clicks * 100/category.impressions,2)
+			category.CPM = round(category.cost * 1000 / category.impressions,2)
+		if not category.clicks == 0:
+			category.CPC = round(category.cost/category.clicks,2)
+		category.save()
+  
+def g_organize():
 	adSource.objects.all().delete()
 	
 	for goog_cam in GoogleCampaign.objects.all():
@@ -175,29 +201,7 @@ def organize():
 		if not category.clicks == 0:
 			category.CPC = round(category.cost/category.clicks,2)
 		
-		category.save()  
-	
-	for fb_group in FacebookAccount.objects.all():
-		fb_name = fb_group.account_name
-		category = adSource()
-		category.provider = 'Facebook'
-		category.name = fb_name
-		
-		for fb_cam in FacebookCampaign.objects.all():
-			if fb_cam.account.account_name == fb_name:
-				category.impressions = category.impressions + fb_cam.impressions
-				category.cost = category.cost + fb_cam.cost
-				category.clicks = category.clicks + fb_cam.clicks
-				
-		category.cost = round(category.cost,2)
-		
-		if not category.impressions == 0:
-			category.CTR = round(category.clicks * 100/category.impressions,2)
-			category.CPM = round(category.cost * 1000 / category.impressions,2)
-		if not category.clicks == 0:
-			category.CPC = round(category.cost/category.clicks,2)
-		category.save()
-  
+		category.save() 
 def total():
 	Source.objects.all().delete()
 	
