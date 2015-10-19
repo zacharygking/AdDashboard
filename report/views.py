@@ -144,9 +144,13 @@ def collect2(request,start_date,end_date,gcid,fcid):
 
 def collect3(request,start_date,end_date,gcid,fcid):
   organize()
-  total()
-  redir = "../../../../../../../../view/" + str(gcid) + '/'+ str(fcid)
-  return redirect(redir)
+  return render(request, 'report/threefour.html')
+
+def collect4(request,start_date,end_date,gcid,fcid):
+	total()
+	redir = "../../../../../../../../../view/" + str(gcid) + '/'+ str(fcid)
+  	return redirect(redir)
+	total()
   
 def organize():
 	adSource.objects.all().delete()
