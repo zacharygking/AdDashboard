@@ -154,8 +154,9 @@ SITE_ID = 1
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = '/home/idmloco3/webapps/addashboard_static/'
 
 LOGIN_REDIRECT_URL = '/'
 
-STATIC_ROOT = '/'
+
 ADMIN_MEDIA_PREFIX = '/static/admin/'
