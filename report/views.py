@@ -74,8 +74,6 @@ def collect1(request,start_date,end_date,gcid,fcid):
     account.report = report_model
     account.save()
     month_google_data(request, client_id)
-    organize()
-    total()
     #"../../../../view"
     return render(request, 'report/onetwo.html') 
     return redirect("../2")
@@ -200,8 +198,9 @@ def g_organize():
 			category.CPM = round(category.cost * 1000 / category.impressions,2)
 		if not category.clicks == 0:
 			category.CPC = round(category.cost/category.clicks,2)
-		
 		category.save() 
+
+
 def total():
 	Source.objects.all().delete()
 	
