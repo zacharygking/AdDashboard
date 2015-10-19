@@ -141,21 +141,21 @@ def collect2(request,start_date,end_date,gcid,fcid):
   return render(request, 'report/twothree.html')
 
 def collect3(request,start_date,end_date,gcid,fcid):
-  g_organize()
+  fb_organize()
   return render(request, 'report/threefour.html')
 
 def collect4(request,start_date,end_date,gcid,fcid):
-  fb_organize()
+  g_organize()
   return render(request, 'report/fourfive.html')
 
 def collect5(request,start_date,end_date,gcid,fcid):
 	total()
 	redir = "../../../../../../../../../../view/" + str(gcid) + '/'+ str(fcid)
-  	return redirect(redir)
-	total()
+	return redirect(redir)
   
 def fb_organize():
- 	for fb_group in FacebookAccount.objects.all():
+	adSource.objects.all().delete()
+	for fb_group in FacebookAccount.objects.all():
 		fb_name = fb_group.account_name
 		category = adSource()
 		category.provider = 'Facebook'
@@ -177,6 +177,7 @@ def fb_organize():
 		category.save()
   
 def g_organize():
+	'''
 	adSource.objects.all().delete()
 	
 	for goog_cam in GoogleCampaign.objects.all():
@@ -199,7 +200,28 @@ def g_organize():
 		if not category.clicks == 0:
 			category.CPC = round(category.cost/category.clicks,2)
 		category.save() 
-
+		'''
+	for goog_cam in GoogleCampaign.objects.all():
+		goog_name = goog_cam.campaign_name
+		category = adSource()
+		category.provider = 'Google'
+		category.name = goog_name
+		
+		for goog_key in GoogleKeyword.objects.all():
+			if goog_key.adgroup.campaign.campaign_name == goog_name:
+				category.impressions = category.impressions + goog_key.impressions
+				category.cost = round(category.cost,2) + round(goog_key.cost,2)
+				category.clicks = category.clicks + goog_key.clicks
+				
+		category.cost = round(category.cost,2)
+		
+		if not category.impressions == 0:
+			category.CTR = round(category.clicks * 100/category.impressions,2)
+			category.CPM = round(category.cost * 1000 / category.impressions,2)
+		if not category.clicks == 0:
+			category.CPC = round(category.cost/category.clicks,2)
+		
+		category.save() 
 
 def total():
 	Source.objects.all().delete()
@@ -843,7 +865,7 @@ def index(request):
 
   return render(request, 'report/index.html', {'fb' : loginlist[0], 'google' : loginlist[1]})
 
-def select(request, gcid, start_date, end_date):
+def select(request, gcid=0, start_date=0, end_date=0):
 	account_list = FacebookAccount.objects.all().order_by('account_name')
 	report = Report.objects.get()
 	if report.user == request.user.username:
