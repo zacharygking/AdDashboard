@@ -66,6 +66,7 @@ def collect1(request,start_date,end_date,gcid,fcid):
     account.report = report_model
     account.save()
     all_google_data(request, client_id)
+    return render(request, 'report/onetwo.html')
     return redirect("../2")
   elif(start_date == '2' and end_date == '2'):
     report_model.date_range = "Last 30 Days"
@@ -75,7 +76,8 @@ def collect1(request,start_date,end_date,gcid,fcid):
     month_google_data(request, client_id)
     organize()
     total()
-    #"../../../../view" 
+    #"../../../../view"
+    return render(request, 'report/onetwo.html') 
     return redirect("../2")
 	
   i_y = start_date[0] + start_date[1] + start_date[2] + start_date[3]
@@ -105,7 +107,7 @@ def collect1(request,start_date,end_date,gcid,fcid):
   #get the facebook data
 
   
-
+  return render(request, 'report/onetwo.html')
   return redirect("../2")
 
 def collect2(request,start_date,end_date,gcid,fcid):
@@ -119,14 +121,10 @@ def collect2(request,start_date,end_date,gcid,fcid):
 
   if(start_date == '1' and end_date == '1'):
     all_fb_data(request, account)
-    organize()
-    total()
-    return redirect("../3")
+    return render(request, 'report/twothree.html')
   elif(start_date == '2' and end_date == '2'):
     month_fb_data(request, account)
-    organize()
-    total()
-    return redirect("../3")
+    return render(request, 'report/twothree.html')
 
   i_y = start_date[0] + start_date[1] + start_date[2] + start_date[3]
   i_m = start_date[5] + start_date[6]
@@ -142,12 +140,12 @@ def collect2(request,start_date,end_date,gcid,fcid):
 
   fb_data(request, account, fbstartDate, fbendDate)
 
-  return redirect("../3")
+  return render(request, 'report/twothree.html')
 
 def collect3(request,start_date,end_date,gcid,fcid):
   organize()
   total()
-  redir = "../../../../../../view/" + str(gcid) + '/'+ str(fcid)
+  redir = "../../../../../../../../view/" + str(gcid) + '/'+ str(fcid)
   return redirect(redir)
   
 def organize():
