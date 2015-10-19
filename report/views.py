@@ -121,12 +121,12 @@ def collect2(request,start_date,end_date,gcid,fcid):
     all_fb_data(request, account)
     organize()
     total()
-    return redirect("../2")
+    return redirect("../3")
   elif(start_date == '2' and end_date == '2'):
     month_fb_data(request, account)
     organize()
     total()
-    return redirect("../2")
+    return redirect("../3")
 
   i_y = start_date[0] + start_date[1] + start_date[2] + start_date[3]
   i_m = start_date[5] + start_date[6]
@@ -142,12 +142,12 @@ def collect2(request,start_date,end_date,gcid,fcid):
 
   fb_data(request, account, fbstartDate, fbendDate)
 
-  return redirect("../2")
+  return redirect("../3")
 
 def collect3(request,start_date,end_date,gcid,fcid):
   organize()
   total()
-  redir = "../../../../../view/" + str(gcid) + '/'+ str(fcid)
+  redir = "../../../../../../view/" + str(gcid) + '/'+ str(fcid)
   return redirect(redir)
   
 def organize():
