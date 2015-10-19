@@ -32,7 +32,7 @@ import pyexcel.ext.xls
 logging.basicConfig(level=logging.INFO)
 logging.getLogger('suds.transport').setLevel(logging.DEBUG)
 
-def collect(request,start_date,end_date,gcid,fcid):
+def collect1(request,start_date,end_date,gcid,fcid):
   client = GoogleClient.objects.get(pk=gcid)
   client_id = client.client_id
   client_name = client.client_name
@@ -51,7 +51,7 @@ def collect(request,start_date,end_date,gcid,fcid):
   GoogleCampaign.objects.all().delete()
   GoogleAdGroup.objects.all().delete()
   GoogleKeyword.objects.all().delete()
-  FacebookCampaign.objects.all().delete()
+
   #FacebookAccount.objects.all().delete()
   Report.objects.all().delete()
 
@@ -66,23 +66,17 @@ def collect(request,start_date,end_date,gcid,fcid):
     account.report = report_model
     account.save()
     all_google_data(request, client_id)
-    all_fb_data(request, account)
-    organize()
-    total()
-    redir = "../../../../../view/" + str(gcid) + '/'+ str(fcid)
-    return redirect(redir)
+    return redirect("../2")
   elif(start_date == '2' and end_date == '2'):
     report_model.date_range = "Last 30 Days"
     report_model.save()
     account.report = report_model
     account.save()
     month_google_data(request, client_id)
-    month_fb_data(request, account)
     organize()
     total()
     #"../../../../view" 
-    redir = "../../../../../view/" + str(gcid) + '/'+ str(fcid)
-    return redirect(redir)
+    return redirect("../2")
 	
   i_y = start_date[0] + start_date[1] + start_date[2] + start_date[3]
   i_m = start_date[5] + start_date[6]
@@ -109,8 +103,48 @@ def collect(request,start_date,end_date,gcid,fcid):
   google_data(request, client_id, googstartDate, googendDate)
 
   #get the facebook data
-  fb_data(request, account, fbstartDate, fbendDate)
+
   
+
+  return redirect("../2")
+
+def collect2(request,start_date,end_date,gcid,fcid):
+  client = GoogleClient.objects.get(pk=gcid)
+  client_id = client.client_id
+  client_name = client.client_name
+
+  FacebookCampaign.objects.all().delete()
+  account = FacebookAccount.objects.get(pk=fcid)
+  report_model = Report.objects.get(user= request.user.username)
+
+  if(start_date == '1' and end_date == '1'):
+    all_fb_data(request, account)
+    organize()
+    total()
+    return redirect("../2")
+  elif(start_date == '2' and end_date == '2'):
+    month_fb_data(request, account)
+    organize()
+    total()
+    return redirect("../2")
+
+  i_y = start_date[0] + start_date[1] + start_date[2] + start_date[3]
+  i_m = start_date[5] + start_date[6]
+  i_d = start_date[8] + start_date[9]
+
+  f_y = end_date[0] + end_date[1] + end_date[2] + end_date[3]
+  f_m = end_date[5] + end_date[6]
+  f_d = end_date[8] + end_date[9]
+
+
+  fbstartDate = i_y + '-' + i_m + '-' + i_d
+  fbendDate = f_y + '-' + f_m + '-' + f_d
+
+  fb_data(request, account, fbstartDate, fbendDate)
+
+  return redirect("../2")
+
+def collect3(request,start_date,end_date,gcid,fcid):
   organize()
   total()
   redir = "../../../../../view/" + str(gcid) + '/'+ str(fcid)
