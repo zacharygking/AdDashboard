@@ -207,8 +207,10 @@ def g_organize():
 		category.provider = 'Google'
 		category.name = goog_name
 		
-		for goog_key in GoogleKeyword.objects.all():
-			if goog_key.adgroup.campaign.campaign_name == goog_name:
+		for goog_ad in goog_cam.googleadgroup_set.all():
+			for goog_key in goog_ad.googlekeyword_set.all():
+			
+				#if goog_key.adgroup.campaign.campaign_name == goog_name:
 				category.impressions = category.impressions + goog_key.impressions
 				category.cost = round(category.cost,2) + round(goog_key.cost,2)
 				category.clicks = category.clicks + goog_key.clicks
