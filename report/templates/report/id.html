@@ -1,42 +1,69 @@
 <html>
 <head>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
 	<title> Report Dashboard </title>
 </head>
 <body>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">
+        <img alt="idmloco" src="https://avatars3.githubusercontent.com/u/3513468?v=3&s=200" height="30" width="30">
+      </a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a href="../../../../"> Home <span class="sr-only">(current)</span></a></li>
+        <li><a href="../../../../Instructions/">Instructions</a></li>
+        <li><a href="../../../privacypolicy">Privacy Policy</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+      {% if request.user.is_authenticated %}
+        <li class="navbar-text"> You are logged in as {{request.user.username}} </li>
+      {% else %}
+        <li class="navbar-text"> You are not logged in </li>
+      {% endif %}
+      <li><a href = "../../../../accounts/logout/">Sign in</button></a></li>
+      <li>&nbsp&nbsp&nbsp</li>
+      <li><a href= "../../../../accounts/login/"> Logout</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
 <center>
-<h1> {{ 'Welcome to the idmloco Ad Report Dashboard' }} </h1>
-    <h3> You are Logged in as <font color="green">{{ request.user.username }} </font></h3>
-    Selected Date Range: <br>
-    {% if start_date == "1" %}
-    <strong><font color="green"> ALL TIME <br><br></strong></font>
-    {% elif start_date == "2" %}
-    <strong><font color="green"> LAST 30 DAYS <br><br></strong></font>
-    {% else %}
-    Start Date: {{start_date}} <br>
-    End Date: {{end_date}} <br><hr>
-    {% endif %}
-    To continue, select the Google client to report for:
+<div class="jumbotron">
+    <h3>To continue, select the Google client to report for:</h3>
     <form>
     <table border=0>
     <tr>
     	<td align="left">
+            <h6>
     		{% for client in ccid_list %}
     		<input type="radio" id="{{client.id}}" name="client" value="{{client.id}}" checked="checked"/>
 			<label for="{{client.id}}">{{client.client_name}}</label><br/>
     		{% endfor %}
+            </h6>
     	</td>
     </tr>
     <tr>
     	<td align="center">
-    		<input type="submit" onclick="window.location = window.location + client.value; return false;"/> 
+    		<input type="submit" class="btn btn-sm btn-primary" onclick="window.location = window.location + client.value; return false;"/> 
     	</td>
     </tr>
 	</form>
 </table>
-	<font color="red"><u><b> NOTE: </u></b></font> <br>Gathering the Data from the APIs may take a few minutes, please be patient
-    <br><br><br>
-    <hr>
-    <a href="../../../../"> Home Page </a> | <a href="../../../privacypolicy/"> View Privacy Policy </a>
+    
 </center>
+</div>
 </body>
 </html>

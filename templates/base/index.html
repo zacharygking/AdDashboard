@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
+<style>
+.jumbotron {
+    margin-bottom: 0px;
+    background-image: url(http://wallpapercave.com/wp/HLy0ev6.png);
+    background-position: 0% 25%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    color: white;
+    text-shadow: black 0.3em 0.3em 0.3em;
+}
+</style>
 <script language="JavaScript">
 <!--
 function WinOpen() {
@@ -33,39 +44,80 @@ function WinOpen() {
 <script type="text/javascript">
 history.pushState('', document.title, window.location.pathname);
 </script>
-<head>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
     <title>
         {% if request.user.is_authenticated %} Logged In {% else %} Not Logged In {% endif %}
     </title>
 </head>
 <body>
+  <nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">
+        <img alt="idmloco" src="https://avatars3.githubusercontent.com/u/3513468?v=3&s=200" height="30" width="30">
+      </a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href=""> Home <span class="sr-only">(current)</span></a></li>
+        <li><a href="instructions/">Instructions</a></li>
+        <li><a href="report/privacypolicy">Privacy Policy</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+      {% if request.user.is_authenticated %}
+        <li class="navbar-text"> You are logged in as {{request.user.username}} </li>
+      {% else %}
+        <li class="navbar-text"> You are not logged in </li>
+      {% endif %}
+      <li><a href = "accounts/login/">Sign in</button></a></li>
+      <li>&nbsp&nbsp&nbsp</li>
+      <li><a href= "accounts/logout/"> Logout</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+
 <center>
-<h1> {{ 'Welcome to the idmloco Ad Report Dashboard' }} </h1>
+<div class="jumbotron">
+<h1> {{ 'idmloco Report Dashboard' }} </h1>
   {% if request.user.is_authenticated %} 
-    <h3> You are Logged in as {{ request.user.username }} <br> <a href ="/accounts/logout"> Click Here to Logout </a></h3>
     {% if fb %}
-      <font color="green"> Your account is linked with a Facebook account <br></font>
-          <p>Start Date: <input type="date" id="start_date" name="start_date" /></p>
-          <p>End Date:<input type="date" id="end_date" name="end_date"/></p><br>
-          <input type="submit" onclick="window.location = window.location + 'report/generate/' + start_date.value + '/' + end_date.value; return false;"/>
+       <b><font color="white">Your account is successfully linked with a Facebook account </font></b><br><br>
+          <p><font color="white"> Start Date: </font> <input type="date" id="start_date" name="start_date" /></p>
+          <p><font color="white"> End Date: </font> <input type="date" id="end_date" name="end_date"/></p><br>
+          <input type="submit" class="btn btn-sm btn-primary" onclick="window.location = window.location + 'report/generate/' + start_date.value + '/' + end_date.value; return false;"/>
         </form>
-        <br> or
-        <br> <a href = "/report/generate/1/1/"> Generate a report for all time </a>
-        <br> <a href = "/report/generate/2/2/"> Generate a report for the last 30 days </a>
-        <br><br>
-        
+        <br><br><font color="white"> or </font><br><br>
+        <form>
+        <input type="button" value="30 Day Report" class="btn btn-sm btn-primary" onClick="window.location=window.location + 'report/generate/2/2/'">
+        &nbsp&nbsp&nbsp
+        <input type="button" value="All Time Report" class="btn btn-sm btn-primary" onClick="window.location=window.location + 'report/generate/1/1/'">
+        </form>
+        </font>
     {% else %}
       <font color="red"> Your Account is not linked with a Facebook account <br></font>
       click <a href="/accounts/social/connections/"> here </a> to link an account <br>
     {% endif %}
   {% else %}
-    <h3><font color="red"> You are not logged in </font>
-      <br>
-    <a href ="/accounts/login"> Click here to login </a>
-      <br>
+    <h3><font color="white"> You are not logged in </font>
+      <br><br>
+      <form>
+        <input type="button" value="Log In" class="btn btn-med btn-primary" onClick="window.location=window.location + 'accounts/login'">
+      </form>
       <br> 
-    In order to use the Dashboards reporting tools, an <br>account linked to Facebook is necessary
-    </h3>
+    <font color="white"> In order to use the Dashboards reporting tools, an <br>account linked to Facebook is necessary
+    </h3></font>
   {% endif %}
 <!--
 <h2> {{ 'GoogleAds'}} </h2>
@@ -85,7 +137,8 @@ history.pushState('', document.title, window.location.pathname);
     <a href="/facebook/accounts" class="btn"> View Report </a>
 
 -->
-<br><hr><a href="report/privacypolicy"> View Privacy Policy </a>
+</div>
+
 </center>
 </body>
 </html>

@@ -2,31 +2,53 @@
 <html>
 <head>
 <title> Report Summary </title>
-
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
 <style type ="text/css">
-.btn {
-  -webkit-border-radius: 28;
-  -moz-border-radius: 28;
-  border-radius: 28px;
-  font-family: Arial;
-  color: #ffffff;
-  font-size: 20px;
-  background: #000000;
-  padding: 10px 20px 10px 20px;
-  text-decoration: none;
+td { 
+    padding: 5px;
 }
-
-.btn:hover {
-  background: #056ca8;
-  color: #000000;
-  text-decoration: none;
-}
-
 </style>
 </head>
 <body>
-<center>
+ <nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">
+        <img alt="idmloco" src="https://avatars3.githubusercontent.com/u/3513468?v=3&s=200" height="30" width="30">
+      </a>
+    </div>
 
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="../../../../"> Home <span class="sr-only">(current)</span></a></li>
+        <li><a href="../../../../Instructions/">Instructions</a></li>
+        <li><a href="../../../privacypolicy">Privacy Policy</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+      {% if request.user.is_authenticated %}
+        <li class="navbar-text"> You are logged in as {{request.user.username}} </li>
+      {% else %}
+        <li class="navbar-text"> You are not logged in </li>
+      {% endif %}
+      <li><a href="../../../../accounts/login/">Sign in</a></li>
+      <li>&nbsp&nbsp&nbsp</li>
+      <li><a href= "../../../../accounts/logout/"> Logout</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>	
+
+<center>
+<div class="jumbotron">
 {% if not authenticated %}
 	You are not authenticated to view the report currently stored <br>
 	to run a new report click <a href="../../"><u> here </u></a>
@@ -48,7 +70,7 @@
 </tr>
 <tr>
 	<td align="center"> 
-		<table border=1>
+		<table border="2">
 		<tr>
 			<td colspan="6" align="center">
 				Google Total Metrics
@@ -75,7 +97,7 @@
 		</table>
 	</td>
 	<td align="center"> 
-		<table border=1>
+		<table border=2>
 		<tr>
 			<td colspan="6" align="center">
 				Facebook Total Metrics
@@ -105,9 +127,12 @@
 </tr>
 <tr>
 	<td colspan="2" align="center">
-		<br><a href="../../../spreadsheet/{{fb_account.account_id}}" class="btn"> Download this as an Excel sheet </a> <br><br><hr>
+		<br><a href="../../../spreadsheet/{{fb_account.account_id}}" class="btn btn-sm btn-primary"> Download this as an Excel sheet </a> <br><br>
 	</td>
 </tr>
+</table>
+</div>
+<table border=0>
 <tr>
 
 	<td colspan="2" align="center"><h1> Extended Report </h1></td>
@@ -118,7 +143,7 @@
 			<h4>Individual Campaign Performance</h4>
 			{% for campaign in g_adsource %}
 			{{campaign.name}}
-			<table border=1>
+			<table border=2>
 			<tr>
 				<td>Clicks</td>
 				<td>Cost</td>
@@ -144,7 +169,7 @@
 			<h4>Individual Campaign Performance</h4>
 			{% for campaign in campaign_list %}
 			{{campaign.name}}
-			<table border=1>
+			<table border=2>
 			<tr>
 				<td>Clicks</td>
 				<td>Cost</td>
@@ -170,9 +195,6 @@
 
 </table>
 {% endif %}
-
-<hr>  
-<a href="../../../../"> Home Page </a> | <a href="../../privacypolicy"> View Privacy Policy </a>
 
 </center>
 

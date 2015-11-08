@@ -6,7 +6,10 @@ from django.core.exceptions import ObjectDoesNotExist
 from allauth.socialaccount.models import SocialToken, SocialAccount
 from report.forms import DateForm
 
+def inst(request):
+    return render(request, 'base/instructions.html')
 
+    
 def index(request):
   try:
     fb_acc = SocialAccount.objects.get(user_id = request.user.id,provider='facebook')
@@ -24,3 +27,4 @@ def index(request):
 
 
   return render(request, 'base/index.html', {'fb' : loginlist[0], 'google' : loginlist[1]})
+

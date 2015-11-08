@@ -150,7 +150,7 @@ def collect4(request,start_date,end_date,gcid,fcid):
 
 def collect5(request,start_date,end_date,gcid,fcid):
 	total()
-	redir = "../../../../../../../../../../view/" + str(gcid) + '/'+ str(fcid)
+	redir = "../../../../../../../../../../../view/" + str(gcid) + '/'+ str(fcid)
 	return redirect(redir)
   
 def fb_organize():
@@ -928,3 +928,6 @@ def getid(request,start_date,end_date):
   ccid_list = GoogleClient.objects.filter(user=request.user).order_by('client_name')
   get_fb_accounts(request)
   return render(request,'report/id.html',{'start_date': start_date, 'end_date': end_date, 'ccid_list':ccid_list})
+
+def load(request,start_date,end_date,gcid,fcid):
+	return render(request, 'report/load.html')

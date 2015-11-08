@@ -21,6 +21,7 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^report/', include('report.urls')),
     url(r'^$', views.index, name="index"),
+    url(r'^instructions/$', views.inst, name="instructions"),
     url(r'^accounts/', include('allauth.urls')),
     url(r'^spreadsheet/', include('spreadsheet.urls')),
 ]

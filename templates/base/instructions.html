@@ -1,0 +1,63 @@
+<head>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <title>
+        {% if request.user.is_authenticated %} Logged In {% else %} Not Logged In {% endif %}
+    </title>
+</head>
+<body>
+  <nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">
+        <img alt="idmloco" src="https://avatars3.githubusercontent.com/u/3513468?v=3&s=200" height="30" width="30">
+      </a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a href="../"> Home <span class="sr-only">(current)</span></a></li>
+        <li class='active'><a href="">Instructions</a></li>
+        <li><a href="../report/privacypolicy">Privacy Policy</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+      {% if request.user.is_authenticated %}
+        <li class="navbar-text"> You are logged in as {{request.user.username}} </li>
+      {% else %}
+        <li class="navbar-text"> You are not logged in </li>
+      {% endif %}
+      <li><a href = "../accounts/login/">Sign in</button></a></li>
+      <li>&nbsp&nbsp&nbsp</li>
+      <li><a href= "../accounts/logout/"> Logout</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+<div class='jumbotron'>
+<h1> Quick use instructions: </h1><br>
+<h3>
+<ol>
+  <li> Ensure that in the current browser that you are logged out or logged into a facebook account with marketing data.</li>
+  <li> On the home page select sign and and use facebook to sign into the web application. </li>
+  <li> Once you are signed in and at the home page choose on of these three options to advance: </li>
+    <ul>
+      <li> Select a date range and select submit. </li>
+      <li> Select 30 day report to generate a report for the last 30 days. </li>
+      <li> Select All Time Report to generate a report for all data.</lu>
+    </ul>
+  <li> Select the Google Client you wish to report for and submit </li>
+  <li> Select the Facebook Client you wish to report for and submit </li><br>
+  <div class="alert alert-warning">
+    <u><b> NOTE:</u></b> At this point the Application gathers data from the APIs, this can take up to a few minutes.
+  </div>
+  <li> Data is shown for the selections made, the 'Download as Excel Sheet' button can be used to download an excel file with the data for the report summary.
+</div>
+</body>
