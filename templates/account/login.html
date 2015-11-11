@@ -2,32 +2,33 @@
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
 </head>
-{% extends "account/base.html" %}
+
 
 <center>
 {% load i18n %}
 {% load account socialaccount %}
 
-{% block head_title %}{% trans "Sign In" %}{% endblock %}
-
 {% block content %}
 
-<h1>{% trans "Sign In" %}</h1>
+<h1>Sign In</h1>
 
 {% get_providers as socialaccount_providers %}
 
 {% if socialaccount_providers %}
+To continue please log in with facebook
+<div class="socialaccount_ballot">
 
-<div class="btn btn-sm btn-primary">
-  <div class="socialaccount_ballot">
+  <div class="socialaccount_providers">
+    {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+  </div>
 
-    <ul class="socialaccount_providers">
-      {% include "socialaccount/snippets/provider_list.html" with process="login" %}
-    </ul>
-
-  <div class="login-or">{% trans 'or' %}</div>
 </div>
 
+{% include "socialaccount/snippets/login_extra.html" %}
+
+{% else %}
+
+{% endif %}
 
 {% endblock %}
 </center>
