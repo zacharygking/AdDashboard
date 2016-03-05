@@ -1,6 +1,24 @@
 # AdDashboard
 Dashboard for management of campaign data
 
+Welcome to the Ad Report Dashboard. This application is built on top of Django and automatically generates Advertisement Campaign reports based on your Google Adwords and Facebook Marketing Data. If you would like to check out the application live it is currently live at http://addashboard.idmloco3.webfactional.com/ however both a facebook marketing enabled account and google adwords account are required in order for the API to fetch the data.
+
+---
+
+If you are looking for a quick overview of this project for assessment purposes the following files contain
+the most vital sections of code:
+
+1. Templating/Bootstrap
+  * report/templates/report/grandview.html
+  * report/templates/report/select.html
+2. API usage/backend development
+  * report/views.py
+3. URL/regex 
+  * report/urls.py
+  * adwords/urls.py
+
+---
+# Developer Notes
 Dependencies <br>
 -googleads <br>
 -facebookads <br>
