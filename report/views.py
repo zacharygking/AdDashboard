@@ -380,7 +380,7 @@ def fb_data(request, account_model, fbstartDate, fbendDate):
 		return HttpResponse("error connecting Social Accounts")
 	
 	#setting the user information
-	my_app_id = '1604519246476149'
+	my_app_id = ''
 	my_app_secret = ''
 	my_access_token = fb_tok.token
 	
@@ -552,8 +552,8 @@ def all_fb_data(request, account_model):
 		return HttpResponse("error connecting Social Accounts")
 	
 	#setting the user information
-	my_app_id = '1604519246476149'
-	my_app_secret = '5a93aee73f1d2856dd542f53e268e483'
+	my_app_id = ''
+	my_app_secret = ''
 	my_access_token = fb_tok.token
 	
 	#gets the ad accounts in a single, pre-existing facebook account
@@ -718,8 +718,8 @@ def get_fb_accounts(request):
 		return HttpResponse("error connecting Social Accounts")
 	
 	#setting the user information
-	my_app_id = '1604519246476149'
-	my_app_secret = '5a93aee73f1d2856dd542f53e268e483'
+	my_app_id = ''
+	my_app_secret = ''
 	my_access_token = fb_tok.token
 	
 	#gets the ad accounts in a single, pre-existing facebook account
@@ -766,8 +766,8 @@ def month_fb_data(request, account_model):
 		return HttpResponse("error connecting Social Accounts")
 	
 	#setting the user information
-	my_app_id = '1604519246476149'
-	my_app_secret = '5a93aee73f1d2856dd542f53e268e483'
+	my_app_id = ''
+	my_app_secret = ''
 	my_access_token = fb_tok.token
 	
 	#gets the ad accounts in a single, pre-existing facebook account
