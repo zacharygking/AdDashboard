@@ -381,7 +381,7 @@ def fb_data(request, account_model, fbstartDate, fbendDate):
 	
 	#setting the user information
 	my_app_id = '1604519246476149'
-	my_app_secret = '5a93aee73f1d2856dd542f53e268e483'
+	my_app_secret = ''
 	my_access_token = fb_tok.token
 	
 	#gets the ad accounts in a single, pre-existing facebook account
